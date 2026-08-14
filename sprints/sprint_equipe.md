@@ -18,7 +18,6 @@ Fase 4 termina bem antes da Sprint 11 do roadmap (Unidade 4, 20/10) — dá folg
 Links do AliExpress (mais barato, prazo 2-6 semanas — cabe no cronograma da Fase 1). Critério de confiança: selo **"Choice"**, loja ≥4.7, milhares de "orders", ler as reviews com foto mais recentes.
 
 ### Prioridade 1 — kit de prática
-- [ ] Frame toothpick 3" — [AlfaRC Peter 112C, 75mm wheelbase](https://www.aliexpress.com/i/1005001484462147.html) ou [frame ajustável 2"/2.5"/3"](https://www.aliexpress.com/item/1005007094494784.html) — vem **vazio** (sem motor/ESC/FC), compra separada
 - [ ] Motor pequeno (classe 1103-1404) — [BetaFPV 1404 3800KV](https://www.aliexpress.com/item/4001209475809.html)
 - [ ] ESC + FC (procurar combo "AIO" pra esse frame, ainda não achei um específico confiável — conferir direto na busca [fpv drone parts](https://www.aliexpress.com/w/wholesale-fpv-drone-parts.html))
 - Total estimado: **~R$150–300**
