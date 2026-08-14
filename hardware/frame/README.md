@@ -1,5 +1,9 @@
 # Frame — peças atuais (Rev. 1.3)
 
+<div align="center">
+<img src="../previews/SkyVolt_Assembly_preview.png" alt="Montagem do frame SkyVolt" width="640">
+</div>
+
 3 peças impressas separadamente, todas dentro da mesa de impressão de 220×220mm:
 
 | Peça | Arquivo | Qtd | Dimensões |

@@ -1,10 +1,18 @@
+<div align="center">
+
 # SkyVolt
 
-Drone medidor e fiscalizador de ambientes de alta e baixa energia — hexacóptero de estrutura impressa em 3D cuja função principal é medir tensão e corrente elétrica em pontos de um ambiente controlado, classificar automaticamente o tipo de circuito (AC/DC, faixa de tensão) e reportar os dados a um aplicativo desktop de controle e monitoramento em tempo real via LoRa.
+**Drone medidor e fiscalizador de ambientes de alta e baixa energia**
+
+<img src="hardware/previews/SkyVolt_Assembly_preview.png" alt="Preview do hexacóptero SkyVolt montado" width="720">
+
+</div>
+
+Hexacóptero de estrutura impressa em 3D cuja função principal é medir tensão e corrente elétrica em pontos de um ambiente controlado, classificar automaticamente o tipo de circuito (AC/DC, faixa de tensão) e reportar os dados a um aplicativo desktop de controle e monitoramento em tempo real via LoRa.
 
 Projeto da disciplina 34943 — Desenvolvimento de Aplicações Computacionais (tema-base: Monitor de Consumo e Qualidade de Energia / Smart Grid), usando o SkyVolt como o protótipo físico opcional permitido pelo enunciado. Documento completo de requisitos, arquitetura e BOM em [`docs/SkyVolt_Documento.pdf`](docs/SkyVolt_Documento.pdf). Roadmap do semestre (14/08 a 02/12/2026) em [`sprints/roadmap.md`](sprints/roadmap.md).
 
-**Princípio orientador de escopo:** a medição é a função *core* do projeto; a plataforma voadora é secundária. **Para a entrega A1/1, o que vale nota é o app desktop (ver `sprints/sprint-01-a1.1.md`), não o drone — a integração com hardware só é exigida na Unidade 4.**
+> **Princípio orientador de escopo:** a medição é a função *core* do projeto; a plataforma voadora é secundária. **Para a entrega A1/1, o que vale nota é o app desktop (ver `sprints/sprint-01-a1.1.md`), não o drone — a integração com hardware só é exigida na Unidade 4.**
 
 ## Equipe
 
@@ -32,6 +40,27 @@ sprints/        planejamento e acompanhamento de sprints
 - Frame mecânico redesenhado em 3 peças modulares (hub + braço ×6 + bandeja de eletrônica), validado para impressora de mesa 220×220mm, motor brushless RS1606 3300KV com verificação de empuxo e autonomia.
 - Firmware, aplicativo desktop e carcaças dos efetuadores ainda não iniciados — ver Seção 8 (Pendências) do documento.
 
-## Impressão 3D
+## Peças (impressão 3D)
 
-Peças em `hardware/frame/`: `SkyVolt_Hub.stl`, `SkyVolt_Arm.stl` (imprimir ×6) e `SkyVolt_Tray.stl`. Gerado pelo script paramétrico `skyvolt_frame.py` (FreeCAD).
+Gerado pelo script paramétrico [`skyvolt_frame.py`](hardware/frame/skyvolt_frame.py) (FreeCAD). Arquivos `.stl`/`.step`/`.FCStd` em [`hardware/frame/`](hardware/frame/).
+
+<div align="center">
+<table>
+<tr>
+<td align="center" width="33%">
+<img src="hardware/previews/SkyVolt_Hub_preview.png" width="100%"><br>
+<b>Hub</b> — 1× — 129,6×121,2mm
+</td>
+<td align="center" width="33%">
+<img src="hardware/previews/SkyVolt_Arm_preview.png" width="100%"><br>
+<b>Braço</b> — 6× — 154×26mm
+</td>
+<td align="center" width="33%">
+<img src="hardware/previews/SkyVolt_Tray_preview.png" width="100%"><br>
+<b>Bandeja de eletrônica</b> — 1× — 150×80mm
+</td>
+</tr>
+</table>
+</div>
+
+Todas as peças cabem numa mesa de impressão de 220×220mm. Hub e braço se unem por encaixe lingueta/rasgo + 2 parafusos M3 por junta; motor RS1606 3300KV (pad 12×12mm/4×M2); braço já sai com base de fixação para servo SG90.
