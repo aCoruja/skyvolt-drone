@@ -1,0 +1,561 @@
+\documentclass[11pt,a4paper]{article}
+
+% ---------- PACOTES ----------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=2.3cm,top=2.6cm,bottom=2.8cm,headheight=22pt]{geometry}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{textcomp}
+
+% ---------- PALETA ----------
+\definecolor{voltnavy}{HTML}{10151B}
+\definecolor{voltcyan}{HTML}{1F6F8F}
+\definecolor{voltcyanlight}{HTML}{5BC2E0}
+\definecolor{voltcopper}{HTML}{B5652F}
+\definecolor{voltamber}{HTML}{9A640C}
+\definecolor{voltamberbg}{HTML}{F3E6CD}
+\definecolor{voltok}{HTML}{2E6B4C}
+\definecolor{voltokbg}{HTML}{DFEEE6}
+\definecolor{voltpending}{HTML}{5B5F82}
+\definecolor{voltgray}{HTML}{4D5A63}
+\definecolor{voltrule}{HTML}{CDD4D9}
+\definecolor{voltbandbg}{HTML}{EEF1F2}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=voltcyan,
+  urlcolor=voltcyan,
+  citecolor=voltcyan,
+  pdftitle={SkyVolt - Documento de Requisitos, Arquitetura e BOM},
+  pdfsubject={Drone medidor e fiscalizador de ambientes de alta e baixa energia}
+}
+
+% ---------- TIPOGRAFIA DE SEÇÕES ----------
+\titleformat{\section}
+  {\Large\bfseries\color{voltcyan}}
+  {\thesection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.6em}{0.9em}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{voltcopper}}
+  {\thesubsection}{0.6em}{}
+\titlespacing*{\subsection}{0pt}{1.2em}{0.6em}
+
+\renewcommand{\contentsname}{Sumário}
+
+% ---------- CABEÇALHO/RODAPÉ ----------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{voltrule}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\footnotesize\ttfamily\color{voltgray} SkyVolt}
+\fancyhead[R]{\footnotesize\ttfamily\color{voltgray} Requisitos \& Arquitetura}
+\fancyfoot[C]{\footnotesize\ttfamily\color{voltgray} \thepage}
+
+% ---------- COMANDOS AUXILIARES ----------
+\newcommand{\specline}[2]{{\ttfamily\footnotesize\color{voltcyanlight}#1}\hfill{\normalsize\color{white}#2}\\[0.4em]}
+\newcommand{\statusok}{\textcolor{voltok}{\textbf{decidido}}}
+\newcommand{\statuspend}{\textcolor{voltpending}{\textbf{pendente}}}
+\newcommand{\statushaz}{\textcolor{voltamber}{\textbf{limitação}}}
+\newcommand{\pesq}{\textsuperscript{\textdagger}}
+
+% caixa de destaque sem depender de tcolorbox
+\newcommand{\aviso}[2]{%
+  \par\noindent\colorbox{voltamberbg}{%
+    \begin{minipage}{\dimexpr\linewidth-2\fboxsep\relax}
+      \vspace{0.3em}
+      \textcolor{voltamber}{\textbf{#1}} #2
+      \vspace{0.3em}
+    \end{minipage}%
+  }\par\vspace{1em}
+}
+
+\newcommand{\destaque}[2]{%
+  \par\noindent\colorbox{voltbandbg}{%
+    \begin{minipage}{\dimexpr\linewidth-2\fboxsep\relax}
+      \vspace{0.3em}
+      \textcolor{voltcyan}{\textbf{#1}} #2
+      \vspace{0.3em}
+    \end{minipage}%
+  }\par\vspace{1em}
+}
+
+\setlength{\parskip}{0.55em}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+% =====================================================
+% CAPA
+% =====================================================
+\begin{titlepage}
+\pagecolor{voltnavy}
+\color{white}
+\thispagestyle{empty}
+
+\begin{center}
+\vspace*{0.6cm}
+{\ttfamily\small\color{voltcyanlight} DOCUMENTO DE REQUISITOS, ARQUITETURA \& BOM \;\textbullet\; REV.\ 1.3}
+
+\vspace{1.6cm}
+
+\begin{tikzpicture}[scale=1.0]
+  \foreach \a in {0,60,...,300} {
+    \draw[voltcyanlight!55!white, line width=0.7pt] (0,0) -- (\a:2.15);
+    \filldraw[voltnavy, draw=voltcyanlight!75!white, line width=0.8pt] (\a:2.15) circle (3.1pt);
+  }
+  \filldraw[voltnavy, draw=white, line width=1pt] (0,0) circle (7pt);
+
+  % efetuador — plugue (lateral, ciano)
+  \draw[voltcyanlight, line width=1.1pt] (0,0) -- (0:1.35);
+  \filldraw[voltcyanlight] (0.1,1.2) rectangle (0.42,1.5);
+  \node[anchor=west, voltcyanlight, font=\ttfamily\tiny] at (0.9,2.3) {plugue 3 pinos};
+  \draw[voltcyanlight, line width=0.4pt] (0.42,1.4) -- (0.85,2.25);
+
+  % efetuador — garra de campo (âmbar)
+  \draw[voltamber!70!voltcyanlight, line width=1.1pt] (0,0) -- (215:1.3);
+  \draw[voltamber!60!white, line width=1.3pt] (215:1.3) circle (4.4pt);
+  \node[anchor=east, voltamber!60!white, font=\ttfamily\tiny] at (-2.0,-1.55) {garra de campo};
+  \draw[voltamber!60!white, line width=0.4pt] (215:1.3) -- (-2.0,-1.5);
+
+  % efetuador — garra de contato (cobre)
+  \draw[voltcopper!85!white, line width=1.1pt] (0,0) -- (145:1.3);
+  \filldraw[voltcopper!85!white] (145:1.3) circle (4.4pt);
+  \node[anchor=east, voltcopper!85!white, font=\ttfamily\tiny] at (-2.0,1.55) {garra de contato};
+  \draw[voltcopper!85!white, line width=0.4pt] (145:1.3) -- (-2.0,1.5);
+\end{tikzpicture}
+
+\vspace{0.9cm}
+
+{\ttfamily\footnotesize\color{voltcyanlight} NOME DE PROJETO}\\[0.35em]
+{\fontsize{42}{46}\selectfont\bfseries SkyVolt}\\[0.55em]
+{\normalsize\itshape\color{white!70!voltnavy} Drone medidor e fiscalizador de ambientes de alta e baixa energia}
+
+\vspace{1.3cm}
+
+\begin{minipage}{10.6cm}
+\specline{CURSO}{Desenvolvimento de Aplicações Desktop}
+\specline{DATA}{14/08/2026}
+\specline{REVISÃO}{1.3}
+\specline{IMPRESSÃO 3D}{Fornecida pela faculdade — sem custo ao projeto}
+\specline{TETO DE ORÇAMENTO (EQUIPAMENTO)}{R\$~2.000,00}
+\specline{GASTO MÉDIO ESTIMADO (BOM)}{R\$~1.903,80}
+\specline{ELABORADO POR}{\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_}
+\end{minipage}
+
+\vfill
+{\ttfamily\tiny\color{voltcyanlight!70!white} vista superior esquemática — três efetuadores em posições distintas do drone}
+\vspace{0.4cm}
+\end{center}
+\end{titlepage}
+
+\pagecolor{white}
+\color{black}
+
+% =====================================================
+% SUMÁRIO
+% =====================================================
+\thispagestyle{empty}
+\tableofcontents
+\newpage
+
+% =====================================================
+% 1. VISÃO GERAL
+% =====================================================
+\section{Visão geral do projeto}
+
+O SkyVolt é um hexacóptero de estrutura impressa em 3D (impressora fornecida pela faculdade, sem custo ao projeto) cuja função principal é medir tensão e corrente elétrica em pontos de um ambiente controlado, classificando automaticamente o tipo de circuito e reportando os dados a um aplicativo desktop de controle e monitoramento.
+
+\destaque{Princípio orientador de escopo:}{a medição é a função \emph{core} do projeto; a plataforma voadora é secundária. Sempre que o orçamento ou o prazo exigirem corte de escopo, a prioridade recai sobre manter a função de medição íntegra, simplificando o drone antes de simplificar o sensoriamento.}
+
+\textbf{Papel do aplicativo desktop} (entregável central da disciplina): estação de controle e monitoramento, recebendo telemetria em tempo real via LoRa, exibindo tensão, corrente, temperatura e classificação num painel, mantendo histórico local de medições e emitindo alertas configuráveis.
+
+\textbf{Faixa elétrica do escopo:} circuitos AC de até 220V (padrão residencial/tomada) e circuitos DC sempre $\leq$100V (restrição de projeto). Ambientes acima de 220V estão fora de escopo pelo risco de arco elétrico.
+
+% =====================================================
+% 2. REQUISITOS FUNCIONAIS
+% =====================================================
+\section{Requisitos funcionais}
+
+\begin{longtable}{@{}p{1.6cm}p{12.6cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Requisito} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+RF01 & Medir tensão AC/DC entre 5V e 220V, conforme o modo de contato disponível. \\
+RF02 & Medir corrente elétrica, por contato direto ou por indução (clamp sem contato). \\
+RF03 & Estimar potência dissipada (Lei de Joule) a partir de leitura térmica. \\
+RF04 & Transmitir telemetria de sensores (tensão, corrente, classificação AC/DC, modo utilizado) via LoRa até a estação base. \\
+RF05 & Exibir os dados recebidos em tempo real no aplicativo desktop (dashboard). \\
+RF06 & Registrar histórico de medições localmente (SD/flash) e sincronizar com o app quando o link permitir. \\
+RF07 & Posicionar um entre três efetuadores — garra de campo, garra de contato ou plugue de 3 pinos — no ponto de medição, conforme o modo classificado. \\
+RF08 & Emitir alerta no aplicativo quando valores excederem limites configuráveis. \\
+RF09 & Transmitir vídeo de navegação (FPV) e comandos de voo via WiFi, com baixa latência. \\
+RF10 & Classificar automaticamente o alvo (conector padrão / campo AC $\geq$100V / contato $<$100V ou DC) por reconhecimento sem contato, a uma distância de stand-off calibrada, sem informação prévia do operador. \\
+RF11 & Executar rotina autônoma de segurança ao detectar qualquer falha, navegando até uma zona segura pré-estabelecida por marcador visual. \\
+\end{longtable}
+
+% =====================================================
+% 3. RNF
+% =====================================================
+\section{Requisitos não-funcionais e restrições}
+
+\begin{longtable}{@{}p{1.9cm}p{12.3cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Restrição} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+RNF01 & Teto de orçamento: R\$~2.000 para equipamento. Impressão 3D fornecida pela faculdade (acordo com o coordenador), sem custo ao projeto. \\
+RNF02 & Isolamento galvânico entre o circuito medido (até 220V) e a eletrônica de controle; hardware do modo contato dimensionado para tolerar até 220V mesmo em caso de erro de classificação (defesa em profundidade). \\
+RNF03 & Domínios de energia separados — propulsão, eletrônica/medição e supervisor de segurança — para evitar falha compartilhada. \\
+RNF04 & Tolerância de posicionamento de $\pm$1,5cm por eixo na abordagem manual, compensada por folga mecânica e funil de captura. \\
+RNF05 & Autonomia mínima de voo de 8 a 12 minutos por missão. \\
+RNF06 & Escopo elétrico fixo: DC sempre $\leq$100V; AC até 220V. \\
+RNF07 & Redundância mínima de propulsão: tolerância a falha de 1 motor entre 6 (hexacóptero). \\
+\end{longtable}
+
+% =====================================================
+% 4. ARQUITETURA
+% =====================================================
+\section{Arquitetura do sistema}
+
+\subsection{Estrutura e propulsão \normalfont\statusok}
+
+Estrutura impressa em impressora 3D fornecida pela faculdade (acordo com o coordenador, sem custo ao orçamento). Configuração \textbf{hexacóptero} (6 motores), escolhida como meio-termo entre custo e redundância mecânica: tolera a perda de 1 motor sem queda imediata, ao contrário de um quadricóptero, e custa/pesa menos que o octocóptero originalmente cogitado.
+
+\textbf{Motores brushless RS1606 3300KV} (hélice 3", ESC brushless dedicado por motor) — decisão revisada na Rev.~1.2 a partir do fechamento da verificação de empuxo abaixo. A escolha original por motor de escova (Rev.~1.1) foi descartada: motor de escova compatível com o porte do frame não sustenta o peso estimado da aeronave. Motor brushless exige comutação eletrônica trifásica — um driver ponte-H simples (ex.\ L293D), adequado para motor de escova, \emph{não} serve para acionar motor brushless; por isso cada motor tem um ESC dedicado no BOM (Seção~6.1).
+
+\destaque{Verificação de empuxo (thrust-to-weight) — fechada:}{peso bruto máximo estimado (cenário pessimista, todos os componentes) $\approx$1.110g — atualizado na Rev.~1.3 com o peso real da estrutura, obtido do CAD paramétrico (FreeCAD) em vez de estimativa de densidade: 264g para hub + 6 braços + bandeja de eletrônica (100\% infill PETG). Motor RS1606~3300KV entrega até 875g de empuxo por motor com hélice de 4" (dado de fabricante, 23,7A/398W a 4S) — TWR$\approx$4,7. Com hélice de 3" (empuxo reduzido, estimado por teoria de disco atuador na ausência de bancada publicada para esse par), TWR estimado $\approx$2,7--3,5, ainda acima do mínimo seguro de 1,5--2,0. A hélice de 3" foi escolhida no lugar da de 4" para também trazer a autonomia para dentro da janela de RNF05 sem alterar a bateria — ver Seção~4.4.}
+
+\textbf{Estrutura modular (Rev.~1.3):} o chassi foi redesenhado em 3 peças impressas separadamente — \textbf{hub} (129,6$\times$121,2mm), \textbf{braço} (154$\times$26mm, imprimir $\times$6) e \textbf{bandeja de eletrônica} (150$\times$80mm) — todas dentro da mesa de impressão de 220$\times$220mm do equipamento disponível (o frame original de peça única, 330$\times$290mm, não cabia). Braço e hub se unem por encaixe lingueta/rasgo (tenon/mortise) reforçado com 2 parafusos M3 por junta (12 no total), mais resistente à flexão do que um encaixe topo-a-topo só parafusado. Pad do motor dimensionado para o RS1606~3300KV: padrão de furação quadrado 12$\times$12mm, 4$\times$M2 — \emph{padrão típico da classe 1606, não confirmado contra o datasheet oficial do fabricante (ver Seção~8)}.
+
+\subsection{Sistema de medição — função principal \normalfont\statusok}
+
+Três efetuadores especializados, cada um resolvendo um modo de medição diferente:
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{Garra de campo} (servo, retrátil) — medição sem contato, para AC $\geq$100V.
+  \item \textbf{Garra de contato} (servo) — contato direto, para $<$100V ou DC.
+  \item \textbf{Plugue de 3 pinos} (padrão NBR~14136), montado na lateral do drone, com funil/guia de captura impresso e ponta modular para adaptadores de outros tipos de tomada.
+\end{itemize}
+
+A escolha do efetuador segue uma triagem em três etapas: aproximação até uma distância de stand-off calibrada, reconhecimento sem contato (sensor de campo EMF + câmera térmica) e classificação — tudo decidido pelo próprio sistema, sem informação prévia do operador sobre o circuito, conforme resumido na tabela a seguir.
+
+\textbf{Fixação física (Rev.~1.3):} os 6 braços do frame já saem impressos com base de fixação para servo SG90 (furação M2, espaçamento 32,5mm, padrão de mercado) — os 3 braços efetuadores usam essa base para a garra/plugue; os outros 3 ficam com a base livre, sem custo extra relevante de peso ou impressão. Carcaça específica de cada efetuador (garra de campo, garra de contato, funil do plugue NBR~14136) ainda não foi desenhada — ver Seção~8.
+
+\textbf{Árvore de triagem do sistema de medição}\\[0.4em]
+\begin{longtable}{@{}p{4.6cm}p{4.6cm}p{5cm}@{}}
+\toprule
+\textbf{Condição} & \textbf{Modo escolhido} & \textbf{Precisão obtida} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Condição} & \textbf{Modo escolhido} & \textbf{Precisão obtida} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Conector padrão visível & Modo A — plugue 3 pinos & Tensão e corrente exatas, seguro em qualquer tensão do escopo \\
+Sinal AC no campo, $\geq$100V & Modo B — campo (clamp) & Corrente exata; tensão em faixa (limitação física) \\
+Sinal AC no campo, $<$100V & Modo B — contato & Tensão e corrente exatas, isolado até 220V \\
+Sem sinal AC (DC, $\leq$100V garantido) & Modo B — contato & Tensão e corrente exatas \\
+\end{longtable}
+
+\subsection{Comunicação e redundância \normalfont\statusok}
+
+Dois rádios com papéis distintos, mapeados a dois microcontroladores independentes:
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{WiFi (ESP32~\#1):} vídeo de navegação (FPV) + comandos de voo — baixa latência.
+  \item \textbf{LoRa (ESP32~\#2):} telemetria de sensores — pacotes pequenos, atua também como \textbf{supervisor de segurança}.
+\end{itemize}
+
+Os dois ESP32 trocam um heartbeat por fio (independente de rádio). O ESP32~\#2 tem câmera própria dedicada e fonte de energia independente — nenhuma dependência compartilhada com o ESP32~\#1 que pudesse derrubar os dois juntos.
+
+\textbf{Máquina de failsafe:} qualquer problema detectado (perda de link, bateria crítica, falha de sensor/IMU, efetuador travado) aciona a mesma rotina — se engajado com o alvo, desengate controlado e lento primeiro; em seguida, navegação autônoma via marcador visual até a zona segura pré-estabelecida, pouso com motores desarmados e efetuador inerte.
+
+\subsection{Energia \normalfont\statusok}
+
+\begin{longtable}{@{}p{3cm}p{4.3cm}p{3cm}p{5cm}@{}}
+\toprule
+\textbf{Domínio} & \textbf{Química/fonte} & \textbf{Proteção} & \textbf{Observação} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Propulsão & Li-ion alta descarga (18650/21700) & BMS obrigatório & Mais seguro que LiPo em queda perto de circuito energizado \\
+Eletrônica/medição & Domínio próprio, separado da propulsão & Isolamento do sag de tensão & Evita brownout do ESP32 durante o contato \\
+Supervisor (ESP32~\#2) & Fonte independente dedicada & — & Sobrevive a falha da bateria de eletrônica \\
+\end{longtable}
+
+Autonomia alvo por missão: 8 a 12 minutos (decolagem $\rightarrow$ aproximação $\rightarrow$ medição $\rightarrow$ retorno $\rightarrow$ pouso).
+
+\destaque{Estimativa de autonomia (atualizada na Rev.~1.3 com o peso real da estrutura):}{motor RS1606~3300KV + hélice~3", bateria de propulsão mantida sem alteração (4$\times$ células 21700 alta descarga, 4,2Ah, 4S1P, $\approx$48,4Wh utilizáveis). Potência em hover estimada em $\approx$277W (era 248W na Rev.~1.2, antes do peso real do CAD) $\rightarrow$ autonomia $\approx$10,5 minutos, ainda dentro da janela de RNF05 mas com menos folga que antes. Estimativa apoiada em extrapolação de curva de eficiência de motor similar (sem bancada real do par motor+hélice escolhido) — ver pendência na Seção~8.}
+
+\subsection{Iluminação \normalfont\statusok}
+
+LED difuso, para a câmera normal de navegação (FPV) em ambientes escuros — difuso em vez de focado para evitar reflexo em contatos metálicos. Controle manual, ligado/desligado pelo piloto.
+
+\subsection{PCBs \normalfont\statusok}
+
+Placas perfuradas de 1 camada, soldadas à mão, divididas por domínio funcional: potência/propulsão, ESP32~\#1, ESP32~\#2, sensores de medição (duas metades fisicamente separadas — lado perigoso e lado seguro, isolados por optoacoplador certificado) e adaptador do Modo~A. Sem plano de terra, a separação física da placa de potência e o aterramento em estrela ganham ainda mais importância para reduzir ruído de chaveamento contaminando a leitura.
+
+\textbf{Fixação física (Rev.~1.3):} bandeja impressa dedicada (150$\times$80mm), aparafusada nos 4 furos de coluna do hub por espaçadores/standoffs — carrega os 2 ESP32-S3 em trilhos dimensionados para o footprint oficial do DevKitC-1 (70$\times$28mm) e os 2 módulos LoRa em baia genérica com abraçadeira (footprint do módulo real ainda não confirmado — ver Seção~8).
+
+% =====================================================
+% 5. RISCOS
+% =====================================================
+\section{Riscos e limitações conhecidas}
+
+\begin{longtable}{@{}p{0.7cm}p{9.6cm}p{3.4cm}@{}}
+\toprule
+\textbf{\#} & \textbf{Risco / limitação} & \textbf{Status} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+1 & Cenário máximo (R\$~2.674,70) ainda ultrapassa o teto de R\$~2.000 caso cotações finais batam no topo da faixa. & \statushaz \\
+2 & Redundância de motor reduzida (hexacóptero vs.\ octocóptero original). & troca aceita \\
+3 & Empuxo e autonomia do par motor RS1606~3300KV + hélice~3" baseados em extrapolação de curva de eficiência, não em bancada real do par escolhido (TWR$\approx$2,7--3,5; autonomia $\approx$10,5min). & mitigado parcial \\
+4 & Tensão exata não garantida em pontos sem conector acima de 100V. & \statushaz \\
+5 & Interferência eletromagnética do próprio circuito medido no link WiFi. & \statushaz \\
+6 & Contato físico em até 220V exige isolamento rigoroso. & \statusok \\
+7 & Bateria danificada em queda perto de circuito energizado — risco composto. & \statusok \\
+8 & Falha compartilhada de bateria de eletrônica derrubando os dois ESP32. & \statusok \\
+9 & Falha compartilhada de câmera entre ESP32~\#1 e \#2. & \statusok \\
+10 & Ausência de plano de terra (PCB 1 camada) aumenta suscetibilidade a ruído. & mitigado parcial \\
+11 & Precisão do encaixe do plugue incompatível com tolerância de pilotagem manual. & \statusok \\
+12 & Drone preso ao alvo indefinidamente se o link cair durante contato. & \statusok \\
+\end{longtable}
+
+% =====================================================
+% 6. BOM
+% =====================================================
+\section{Levantamento de custos (BOM)}
+
+Os valores abaixo combinam cotações diretas de mercado brasileiro (agosto/2026, marcadas com \pesq) e estimativas de engenharia para itens sem padronização de preço (componentes equivalentes, faixa de mercado observada). Colunas \textbf{Mín.}, \textbf{Méd.} e \textbf{Máx.} representam o cenário mais barato, o cenário médio esperado e o cenário mais caro plausível por item.
+
+\subsection{Estrutura e propulsão}
+
+\begin{longtable}{@{}p{5.4cm}p{0.9cm}p{1.7cm}p{1.7cm}p{1.7cm}p{2.1cm}@{}}
+\toprule
+\textbf{Item} & \textbf{Qtd} & \textbf{Mín.\ un.} & \textbf{Méd.\ un.} & \textbf{Máx.\ un.} & \textbf{Total (méd.)} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Motor brushless RS1606 3300KV & 6 & R\$~35,00 & R\$~50,00 & R\$~70,00 & R\$~300,00 \\
+ESC brushless 30A (dedicado por motor) & 6 & R\$~18,00 & R\$~25,00 & R\$~35,00 & R\$~150,00 \\
+Kit hélices 3" (jogo + reservas) & 1 & R\$~20,00 & R\$~35,00 & R\$~50,00 & R\$~35,00 \\
+Filamento PLA/PETG (chassi) & 1 & R\$~30,00 & R\$~45,00 & R\$~60,00 & R\$~45,00 \\
+\midrule
+\multicolumn{5}{r}{\textbf{Subtotal — Mín.\ R\$~368,00 \quad Méd.\ R\$~530,00 \quad Máx.\ R\$~740,00}} & \\
+\end{longtable}
+
+\subsection{Controle e comunicação}
+
+\begin{longtable}{@{}p{5.4cm}p{0.9cm}p{1.7cm}p{1.7cm}p{1.7cm}p{2.1cm}@{}}
+\toprule
+\textbf{Item} & \textbf{Qtd} & \textbf{Mín.\ un.} & \textbf{Méd.\ un.} & \textbf{Máx.\ un.} & \textbf{Total (méd.)} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+ESP32-S3 (módulo dev)\pesq & 2 & R\$~27,34 & R\$~45,00 & R\$~74,80 & R\$~90,00 \\
+Módulo LoRa SX1276/RFM95\pesq & 2 & R\$~70,00 & R\$~79,90 & R\$~90,00 & R\$~159,80 \\
+\midrule
+\multicolumn{5}{r}{\textbf{Subtotal — Mín.\ R\$~194,68 \quad Méd.\ R\$~249,80 \quad Máx.\ R\$~329,60}} & \\
+\end{longtable}
+
+\subsection{Câmeras}
+
+\begin{longtable}{@{}p{5.4cm}p{0.9cm}p{1.7cm}p{1.7cm}p{1.7cm}p{2.1cm}@{}}
+\toprule
+\textbf{Item} & \textbf{Qtd} & \textbf{Mín.\ un.} & \textbf{Méd.\ un.} & \textbf{Máx.\ un.} & \textbf{Total (méd.)} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Câmera térmica MLX90640\pesq & 1 & R\$~180,00 & R\$~260,00 & R\$~400,00 & R\$~260,00 \\
+Câmera FPV + VTX (navegação) & 1 & R\$~90,00 & R\$~150,00 & R\$~250,00 & R\$~150,00 \\
+Câmera dedicada ESP32~\#2 (OV2640)\pesq & 1 & R\$~25,00 & R\$~40,00 & R\$~55,00 & R\$~40,00 \\
+\midrule
+\multicolumn{5}{r}{\textbf{Subtotal — Mín.\ R\$~295,00 \quad Méd.\ R\$~450,00 \quad Máx.\ R\$~705,00}} & \\
+\end{longtable}
+
+\subsection{Sensores de medição}
+
+\begin{longtable}{@{}p{5.4cm}p{0.9cm}p{1.7cm}p{1.7cm}p{1.7cm}p{2.1cm}@{}}
+\toprule
+\textbf{Item} & \textbf{Qtd} & \textbf{Mín.\ un.} & \textbf{Méd.\ un.} & \textbf{Máx.\ un.} & \textbf{Total (méd.)} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Sensor de campo EMF (não-contato) & 1 & R\$~30,00 & R\$~50,00 & R\$~70,00 & R\$~50,00 \\
+Clamp de corrente SCT-013\pesq & 1 & R\$~47,50 & R\$~55,00 & R\$~63,10 & R\$~55,00 \\
+Sensor Hall/shunt de contato (ACS712) & 1 & R\$~15,00 & R\$~20,00 & R\$~28,00 & R\$~20,00 \\
+Optoacoplador PC817 (módulo)\pesq & 2 & R\$~7,00 & R\$~8,00 & R\$~12,00 & R\$~16,00 \\
+Fusível/PTC + proteção & 1 & R\$~5,00 & R\$~10,00 & R\$~15,00 & R\$~10,00 \\
+\midrule
+\multicolumn{5}{r}{\textbf{Subtotal — Mín.\ R\$~111,50 \quad Méd.\ R\$~151,00 \quad Máx.\ R\$~200,10}} & \\
+\end{longtable}
+
+\subsection{Efetuadores}
+
+\begin{longtable}{@{}p{5.4cm}p{0.9cm}p{1.7cm}p{1.7cm}p{1.7cm}p{2.1cm}@{}}
+\toprule
+\textbf{Item} & \textbf{Qtd} & \textbf{Mín.\ un.} & \textbf{Méd.\ un.} & \textbf{Máx.\ un.} & \textbf{Total (méd.)} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Micro servo (SG90 ou equiv.)\pesq & 3 & R\$~16,90 & R\$~19,00 & R\$~25,00 & R\$~57,00 \\
+Plugue NBR~14136 + adaptadores & 1 & R\$~15,00 & R\$~25,00 & R\$~35,00 & R\$~25,00 \\
+Funil de captura + filamento extra & 1 & R\$~10,00 & R\$~15,00 & R\$~20,00 & R\$~15,00 \\
+Hardware das garras (dobradiças, fixação) & 1 & R\$~20,00 & R\$~35,00 & R\$~50,00 & R\$~35,00 \\
+\midrule
+\multicolumn{5}{r}{\textbf{Subtotal — Mín.\ R\$~95,70 \quad Méd.\ R\$~132,00 \quad Máx.\ R\$~180,00}} & \\
+\end{longtable}
+
+\subsection{Energia}
+
+\begin{longtable}{@{}p{5.4cm}p{0.9cm}p{1.7cm}p{1.7cm}p{1.7cm}p{2.1cm}@{}}
+\toprule
+\textbf{Item} & \textbf{Qtd} & \textbf{Mín.\ un.} & \textbf{Méd.\ un.} & \textbf{Máx.\ un.} & \textbf{Total (méd.)} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Célula Li-ion 18650/21700 alta descarga\pesq & 4 & R\$~25,00 & R\$~35,00 & R\$~45,00 & R\$~140,00 \\
+BMS (pack propulsão) & 1 & R\$~25,00 & R\$~40,00 & R\$~60,00 & R\$~40,00 \\
+Bateria eletrônica (domínio medição) & 1 & R\$~20,00 & R\$~30,00 & R\$~40,00 & R\$~30,00 \\
+Bateria backup ESP32~\#2 & 1 & R\$~10,00 & R\$~17,00 & R\$~25,00 & R\$~17,00 \\
+\midrule
+\multicolumn{5}{r}{\textbf{Subtotal — Mín.\ R\$~155,00 \quad Méd.\ R\$~227,00 \quad Máx.\ R\$~305,00}} & \\
+\end{longtable}
+
+\subsection{Iluminação, PCB e montagem}
+
+\begin{longtable}{@{}p{5.4cm}p{0.9cm}p{1.7cm}p{1.7cm}p{1.7cm}p{2.1cm}@{}}
+\toprule
+\textbf{Item} & \textbf{Qtd} & \textbf{Mín.\ un.} & \textbf{Méd.\ un.} & \textbf{Máx.\ un.} & \textbf{Total (méd.)} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+LED difuso + driver/resistor & 1 & R\$~10,00 & R\$~17,00 & R\$~25,00 & R\$~17,00 \\
+Placa perfurada (protoboard) & 6 & R\$~8,00 & R\$~12,00 & R\$~15,00 & R\$~72,00 \\
+Fios, conectores, solda, hardware geral & 1 & R\$~50,00 & R\$~75,00 & R\$~100,00 & R\$~75,00 \\
+\midrule
+\multicolumn{5}{r}{\textbf{Subtotal — Mín.\ R\$~108,00 \quad Méd.\ R\$~164,00 \quad Máx.\ R\$~215,00}} & \\
+\end{longtable}
+
+\subsection{Resumo geral e comparação com o orçamento}
+
+\begin{longtable}{@{}p{6.5cm}p{2.3cm}p{2.3cm}p{2.3cm}@{}}
+\toprule
+\textbf{Categoria} & \textbf{Mín.} & \textbf{Méd.} & \textbf{Máx.} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Estrutura e propulsão & R\$~368,00 & R\$~530,00 & R\$~740,00 \\
+Controle e comunicação & R\$~194,68 & R\$~249,80 & R\$~329,60 \\
+Câmeras & R\$~295,00 & R\$~450,00 & R\$~705,00 \\
+Sensores de medição & R\$~111,50 & R\$~151,00 & R\$~200,10 \\
+Efetuadores & R\$~95,70 & R\$~132,00 & R\$~180,00 \\
+Energia & R\$~155,00 & R\$~227,00 & R\$~305,00 \\
+Iluminação, PCB e montagem & R\$~108,00 & R\$~164,00 & R\$~215,00 \\
+\midrule
+\textbf{TOTAL DO PROJETO} & \textbf{R\$~1.327,88} & \textbf{R\$~1.903,80} & \textbf{R\$~2.674,70} \\
+\end{longtable}
+
+\destaque{Orçamento cabe no cenário provável, com folga reduzida:}{com o teto revisado para R\$~2.000,00 e a impressão 3D fora do orçamento (fornecida pela faculdade), tanto o cenário mínimo (R\$~1.327,88) quanto o médio (R\$~1.903,80) ficam dentro do teto, com folga de R\$~672,12 e R\$~96,20 respectivamente. A troca para motor brushless (Rev.~1.2) reduziu a folga do cenário médio de R\$~312,20 para R\$~96,20 — margem bem mais apertada que antes.}
+
+\aviso{Risco remanescente — cenário máximo:}{o cenário mais caro (R\$~2.674,70) ainda ultrapassa o teto de R\$~2.000,00 em R\$~674,70 (era R\$~374,70 antes da troca de motor). O conjunto motor+ESC brushless (R\$~312 de oscilação combinada) passou a rivalizar com a câmera térmica MLX90640 (R\$~180 a R\$~400, variação de R\$~220) como maior fator de risco orçamentário, seguidos pela câmera FPV+VTX e pelo pack de energia. Cotação formal do motor/ESC antes da compra é recomendada dado o novo impacto no teto.}
+
+% =====================================================
+% 7. DECISÕES
+% =====================================================
+\section{Registro de decisões}
+
+\begin{longtable}{@{}p{4.4cm}p{4.4cm}p{5.4cm}@{}}
+\toprule
+\textbf{Decisão} & \textbf{Alternativa considerada} & \textbf{Justificativa} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+Hexacóptero & Quadricóptero / octocóptero & Meio-termo entre custo e redundância de motor \\
+Motor brushless RS1606~3300KV + hélice~3" & Motor de escova (decisão original, Rev.~1.1); motor brushless 2205/2207 & Verificação de TWR (peso pessimista $\approx$991g) mostrou que motor de escova não sustenta o peso; motor 2205/2207 sustenta com folga mas puxa corrente ($>$20A/motor) incompatível com a bateria do BOM; RS1606+hélice~3" fecha TWR seguro ($\approx$3--4$\times$) e autonomia $\approx$11,7min (RNF05) \\
+Manter a bateria de propulsão original (4$\times$~21700 alta descarga, 4,2Ah) & Redimensionar a bateria para a nova autonomia & Evita retrabalho na célula já escolhida; hélice~3" (menos eficiente que 4") absorve o excesso de autonomia e traz o tempo de voo para dentro de 8--12min sem mexer na bateria \\
+Frame em 3 peças modulares (hub + braço~$\times$6 + bandeja de eletrônica), encaixe lingueta/rasgo + parafuso M3 & Frame em peça única & Peça única (330$\times$290mm) não cabe na mesa de impressão de 220$\times$220mm disponível; encaixe lingueta/rasgo resiste a flexão melhor que topo-a-topo só parafusado \\
+Bandeja de eletrônica separada, aparafusada no hub por standoffs & ESP32/LoRa direto no hub & Hub não tem área livre para 2$\times$ESP32-S3 (70$\times$28mm) + 2$\times$LoRa sem competir com o favo de mel e os braços; bandeja em segundo andar resolve o conflito de espaço \\
+Base de servo (SG90) presente nos 6 braços, não só nos 3 efetuadores & Base só nos 3 braços efetuadores & Mantém a peça do braço única/intercambiável para impressão; custo de peso extra nos 3 braços sem efetuador é desprezível \\
+Abordagem manual via FPV & Navegação autônoma completa & Reduz escopo de software; drone é secundário à medição \\
+Três efetuadores especializados & Um único efetuador genérico & Cada modo de medição tem exigência física distinta \\
+Triagem autônoma às cegas & Operador pré-define o modo & Exigência do projeto: sistema deve classificar sozinho \\
+Li-ion 18650/21700 na propulsão & LiPo tradicional & Menor risco de incêndio em queda perto de circuito energizado \\
+Dois domínios de bateria & Bateria única com BEC & Evita brownout do ESP32 durante o contato de medição \\
+Dois ESP32 com papéis distintos & Um único ESP32 fazendo tudo & Redundância de rádio e supervisor de segurança independente \\
+Navegação de emergência por marcador visual & Dead-reckoning puro & Mais robusto contra deriva; problema de visão contido a um alvo fixo \\
+Placa de medição em duas metades separadas & Duas zonas na mesma placa & Isolamento físico real, independente da solda manual \\
+PCB em protoboard (1 camada) & Fabricação profissional sob encomenda & Economia de orçamento e prazo \\
+\end{longtable}
+
+% =====================================================
+% 8. PENDÊNCIAS
+% =====================================================
+\section{Pendências e trabalho futuro}
+
+\begin{itemize}[itemsep=3pt]
+  \item Validação em bancada real do motor RS1606~3300KV com hélice de 3" (empuxo e corrente em throttle parcial) — a autonomia estimada ($\approx$10,5min) usa extrapolação da curva de eficiência de outro motor, não dado medido do par escolhido.
+  \item Confirmação do padrão de furação real do RS1606 (assumido 12$\times$12mm, 4$\times$M2 — padrão típico da classe 1606, não confirmado contra datasheet do fabricante) antes de imprimir o braço em lote.
+  \item Confirmação do footprint real do módulo LoRa (SX1276/RFM95) para apertar o encaixe da bandeja de eletrônica — hoje é uma baia genérica com abraçadeira por falta de dado de fixação confirmado.
+  \item Cotação formal do motor brushless RS1606~3300KV e do ESC dedicado — juntos, tornaram-se o maior fator de oscilação do orçamento (R\$~312 de variação combinada), reduzindo a folga do cenário médio para R\$~96,20.
+  \item Peso da estrutura impressa (hub + 6 braços + bandeja) já confirmado por CAD real: 264g. Falta confirmar o peso real dos demais componentes (motor, ESC, bateria, eletrônica, sensores) contra a estimativa pessimista usada na verificação de empuxo ($\approx$1.110g no total).
+  \item Fechamento do BOM com cotações formais (não estimativas) para os itens sem preço pesquisado.
+  \item Cotação formal da câmera térmica MLX90640 antes das demais compras — é o item de maior risco de estourar o teto de R\$~2.000,00 no cenário máximo.
+  \item Escolha de modelos específicos de sensor (clamp de corrente, sensor de campo EMF, sensor Hall/shunt de contato).
+  \item Projeto das carcaças dos 3 efetuadores (garra de campo, garra de contato, funil/guia de captura do plugue NBR~14136) — a base de fixação no braço já existe, falta a peça específica de cada um.
+  \item Definição empírica dos timeouts do failsafe (janela curta de reconexão vs.\ janela longa em estado engajado).
+  \item Definição do protocolo exato de mensagens LoRa (formato de pacote, taxa de amostragem da telemetria).
+  \item Projeto detalhado do aplicativo desktop (stack tecnológica, banco de dados local, layout do dashboard).
+\end{itemize}
+
+% =====================================================
+% REGISTRO DE APROVAÇÃO
+% =====================================================
+\section*{Registro de aprovação}
+\addcontentsline{toc}{section}{Registro de aprovação}
+
+\begin{longtable}{@{}p{4.2cm}p{4.2cm}@{}}
+\textbf{Elaborado por:} & \rule{4cm}{0.4pt} \\[1.4em]
+\textbf{Data:} & \rule{4cm}{0.4pt} \\[1.4em]
+\textbf{Orientador:} & \rule{4cm}{0.4pt} \\[1.4em]
+\textbf{Assinatura:} & \rule{4cm}{0.4pt} \\
+\end{longtable}
+
+\vfill
+\begin{center}
+{\footnotesize\ttfamily\color{voltgray} SkyVolt \;\textbullet\; Documento de Requisitos, Arquitetura \& BOM \;\textbullet\; Revisão 1.3 \;\textbullet\; 14/08/2026}
+\end{center}
+
+\end{document}

@@ -1,0 +1,18 @@
+# FreeCAD
+*.FCBak
+*.FCStd1
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# Python
+__pycache__/
+*.pyc
+
+# SO
+.DS_Store
+Thumbs.db
