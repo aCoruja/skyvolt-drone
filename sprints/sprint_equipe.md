@@ -15,28 +15,34 @@ Fase 4 termina bem antes da Sprint 11 do roadmap (Unidade 4, 20/10) — dá folg
 
 ## Lista de compras
 
+Links do AliExpress (mais barato, prazo 2-6 semanas — cabe no cronograma da Fase 1). Critério de confiança: selo **"Choice"**, loja ≥4.7, milhares de "orders", ler as reviews com foto mais recentes.
+
 ### Prioridade 1 — kit de prática
-- [ ] Kit DIY toothpick/tiny whoop (3"–4"): frame + 4 motores brushless pequenos + ESC 4-em-1 + FC + hélices — **~R$150–300**
+- [ ] Frame toothpick 3" — [AlfaRC Peter 112C, 75mm wheelbase](https://www.aliexpress.com/i/1005001484462147.html) ou [frame ajustável 2"/2.5"/3"](https://www.aliexpress.com/item/1005007094494784.html) — vem **vazio** (sem motor/ESC/FC), compra separada
+- [ ] Motor pequeno (classe 1103-1404) — [BetaFPV 1404 3800KV](https://www.aliexpress.com/item/4001209475809.html)
+- [ ] ESC + FC (procurar combo "AIO" pra esse frame, ainda não achei um específico confiável — conferir direto na busca [fpv drone parts](https://www.aliexpress.com/w/wholesale-fpv-drone-parts.html))
+- Total estimado: **~R$150–300**
 
 ### Prioridade 2 — ferramentas (pular o que já tem)
-- [ ] Soldador de ponta fina + solda + fluxo
-- [ ] Alicate de corte (flush cutter)
-- [ ] Kit de chave allen/hex (M2/M2,5/M3) — já serve pro SkyVolt depois
-- [ ] Multímetro
-- [ ] Termorretrátil (várias espessuras)
-- [ ] Álcool isopropílico
+- [ ] Soldador de ponta fina — [busca: kit ferro de solda](https://www.aliexpress.com/w/wholesale-soldering-iron-kit.html) (escolher um com regulagem de temperatura)
+- [ ] Alicate de corte (flush cutter) — [Libraton Micro Wire Cutter 5.12"](https://www.aliexpress.com/item/1005006301271062.html)
+- [ ] Kit de chave allen/hex — [7pçs 0,7-3mm](https://www.aliexpress.com/item/32904829892.html) — já serve pro SkyVolt depois (M2/M3)
+- [ ] Multímetro — [HoldPeak HP-36K mini](https://www.aliexpress.com/item/HoldPeak-HP-36K-DC-AC-Mini-Digital-Multimeter-3999-Display-Portable-Resistance-Capacitor-Frequency-Meter-Measuring/32831008802.html)
+- [ ] Termorretrátil — [kit 164pçs, 8 tamanhos](https://www.aliexpress.com/item/32985677716.html)
+- [ ] Álcool isopropílico — **comprar local** (farmácia/loja de eletrônica), não compensa pedir importado
 
 ### Prioridade 3 — energia e segurança
-- [ ] Bateria pequena (1S/2S, geralmente já vem no kit) + carregador USB balanceado
-- [ ] **LiPo bag** (bolsa retardante) — obrigatório, não opcional
+- [ ] Bateria 1S/2S pequena — geralmente já vem no kit da Prioridade 1; se não vier, [busca: bateria lipo 1S](https://www.aliexpress.com/w/wholesale-1s-lipo-battery.html)
+- [ ] Carregador USB balanceado — [EMAX charger 1S/2S USB](https://www.aliexpress.com/item/33063462223.html)
+- [ ] **LiPo bag** (bolsa retardante, obrigatório) — [Ovonic 260×130×180mm](https://www.aliexpress.com/item/1005001727772122.html) ou [HRB à prova de fogo](https://www.aliexpress.com/item/1005004144090727.html)
 
 ### Prioridade 4 — treino sem gastar peça
-- [ ] Simulador de voo (Liftoff, Velocidrone ou FPV Freerider gratuito)
+- [ ] Simulador de voo (Liftoff/Velocidrone — pagos, Steam; FPV Freerider — gratuito) — não é AliExpress, é software
 
 ### Bônus — valida uma pendência real do SkyVolt
-- [ ] 1× motor RS1606 3300KV avulso + parafusos M2 (~R$35–70) — testar contra `SkyVolt_Arm.stl` antes de comprar os 6 motores de verdade
+- [ ] 1× motor RS1606 3300KV avulso — [EMAX RS1606 3300KV/4000KV, US$22,15](https://www.aliexpress.com/item/4001075493603.html) (loja oficial EMAX se aparecer, vale pagar mais por procedência aqui — esse item valida uma medida crítica do CAD) + parafusos M2 — testar contra `SkyVolt_Arm.stl` antes de comprar os 6 motores de verdade
 
-**Total estimado da trilha:** ~R$300–500.
+**Total estimado da trilha:** ~R$300–500 (câmbio do dia).
 
 ## Observação
 
