@@ -1,0 +1,3 @@
+# Destino no GitHub (repo skyvolt-drone): requirements.txt (raiz do repo)
+PyQt5>=5.15
+pyqtgraph>=0.13
