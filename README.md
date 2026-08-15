@@ -24,7 +24,7 @@ Projeto da disciplina 34943 — Desenvolvimento de Aplicações Computacionais (
 README.md       este arquivo — visão geral, equipe e estado do projeto
 docs/           documentos técnicos: requisitos, arquitetura e BOM (fonte .tex + PDF gerado),
                 requisitos funcionais do app desktop
-ideias/         planejamento e acompanhamento de sprints — o que o time PLANEJA fazer, semana a semana
+ideias/         planejamento e acompanhamento de ideias — o que o time PLANEJA fazer, semana a semana
 avaliacoes/     devolutivas oficiais do professor por entrega — nota, feedback, pontos a corrigir
 hardware/       projeto mecânico (CAD paramétrico FreeCAD, STL/STEP para impressão 3D)
   frame/        peças atuais — hub, braço (x6) e bandeja de eletrônica
