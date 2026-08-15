@@ -5,11 +5,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from app.controllers.main_controller import MainController
-
-
-def criar_janela_principal() -> MainController:
-    return MainController()
+from app.controllers.main_controller import criar_janela_principal
 
 
 def main() -> int:
