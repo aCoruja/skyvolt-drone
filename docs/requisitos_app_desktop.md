@@ -1,6 +1,6 @@
 # Requisitos funcionais — Aplicativo desktop (HMI de supervisão energética)
 
-> Especificação repassada pelo professor para a última entrega do semestre (Unidade 4 / apresentação final, 01–02/12/2026). Complementa `SkyVolt_Documento.pdf` (requisitos, arquitetura e BOM gerais do projeto) e detalha especificamente o comportamento esperado do software desktop. O checklist de nota da primeira entrega (simulada, sem hardware real) está em [`sprints/sprint-01-a1.1.md`](../sprints/sprint-01-a1.1.md); este documento descreve o alvo final, incluindo a integração serial real que entra a partir da Unidade 4.
+> Especificação repassada pelo professor para a última entrega do semestre (Unidade 4 / apresentação final, 01–02/12/2026). Complementa `SkyVolt_Documento.pdf` (requisitos, arquitetura e BOM gerais do projeto) e detalha especificamente o comportamento esperado do software desktop. O checklist de nota da primeira entrega (simulada, sem hardware real) está em [`ideias/ideia_A1_1.md`](../ideias/ideia_A1_1.md); este documento descreve o alvo final, incluindo a integração serial real que entra a partir da Unidade 4.
 
 ## Visão geral
 
@@ -53,4 +53,4 @@ Toda a atividade do sistema é centralizada numa `QTableWidget` de registros:
 
 ## Opção de tema livre (prototipagem de microcontroladores)
 
-Equipes que preferirem podem aplicar o software supervisor a um protótipo físico/projeto desenvolvido em disciplinas como Microcontroladores, Microprocessadores ou Sistemas Embarcados, desde que o projeto atenda aos mesmos requisitos de leitura analógica/digital e acionamento de atuadores. O SkyVolt usa essa opção: o "microcontrolador" é o ESP32 #2 (telemetria/LoRa, ver [`firmware/esp32-telemetry/`](../firmware/esp32-telemetry/)), e o disjuntor/relé é simulado pelo módulo de segurança embarcado no drone até a integração real (Unidade 4, ver [`sprints/roadmap.md`](../sprints/roadmap.md)).
+Equipes que preferirem podem aplicar o software supervisor a um protótipo físico/projeto desenvolvido em disciplinas como Microcontroladores, Microprocessadores ou Sistemas Embarcados, desde que o projeto atenda aos mesmos requisitos de leitura analógica/digital e acionamento de atuadores. O SkyVolt usa essa opção: o "microcontrolador" é o ESP32 #2 (telemetria/LoRa, ver [`firmware/esp32-telemetry/`](../firmware/esp32-telemetry/)), e o disjuntor/relé é simulado pelo módulo de segurança embarcado no drone até a integração real (Unidade 4, ver [`ideias/roadmap.md`](../ideias/roadmap.md)).

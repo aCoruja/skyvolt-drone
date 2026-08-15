@@ -2,7 +2,7 @@
 
 Registro das devolutivas oficiais do professor para cada entrega da disciplina 34943 — Desenvolvimento de Aplicações Computacionais: nota, feedback e pontos a corrigir.
 
-Diferença em relação a `sprints/`: lá o time documenta o que **planeja** fazer (roadmap, checklist por critério); aqui documenta-se o que o professor **efetivamente avaliou**, depois da entrega. Servem para o time acompanhar a evolução do projeto.
+Diferença em relação a `ideias/`: lá o time documenta o que **planeja** fazer (roadmap, checklist por critério); aqui documenta-se o que o professor **efetivamente avaliou**, depois da entrega. Servem para o time acompanhar a evolução do projeto.
 
 ## Índice
 
