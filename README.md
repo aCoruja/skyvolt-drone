@@ -10,7 +10,7 @@
 
 Hexacóptero de estrutura impressa em 3D cuja função principal é medir tensão e corrente elétrica em pontos de um ambiente controlado, classificar automaticamente o tipo de circuito (AC/DC, faixa de tensão) e reportar os dados a um aplicativo desktop de controle e monitoramento em tempo real via LoRa.
 
-Projeto da disciplina 34943 — Desenvolvimento de Aplicações Computacionais (tema-base: Monitor de Consumo e Qualidade de Energia / Smart Grid), usando o SkyVolt como o protótipo físico opcional permitido pelo enunciado. Documento completo de requisitos, arquitetura e BOM em [`docs/SkyVolt_Documento.pdf`](docs/SkyVolt_Documento.pdf). Roadmap do semestre (14/08 a 02/12/2026) em [`sprints/roadmap.md`](sprints/roadmap.md).
+Projeto da disciplina 34943 — Desenvolvimento de Aplicações Computacionais (tema-base: Monitor de Consumo e Qualidade de Energia / Smart Grid), usando o SkyVolt como o protótipo físico opcional permitido pelo enunciado. Documento completo de requisitos, arquitetura e BOM em [`docs/SkyVolt_Documento.pdf`](docs/SkyVolt_Documento.pdf); requisitos funcionais do software desktop (HMI de supervisão energética) em [`docs/requisitos_app_desktop.md`](docs/requisitos_app_desktop.md). Roadmap do semestre (14/08 a 02/12/2026) em [`sprints/roadmap.md`](sprints/roadmap.md); devolutivas das entregas em [`avaliacoes/`](avaliacoes/).
 
 > **Princípio orientador de escopo:** a medição é a função *core* do projeto; a plataforma voadora é secundária. **Para a entrega A1/1, o que vale nota é o app desktop (ver `sprints/sprint-01-a1.1.md`), não o drone — a integração com hardware só é exigida na Unidade 4.**
 
@@ -23,7 +23,11 @@ Projeto da disciplina 34943 — Desenvolvimento de Aplicações Computacionais (
 ## Estrutura do repositório
 
 ```
-docs/           documento de requisitos, arquitetura e BOM (fonte .tex + PDF gerado)
+README.md       este arquivo — visão geral, equipe e estado do projeto
+docs/           documentos técnicos: requisitos, arquitetura e BOM (fonte .tex + PDF gerado),
+                requisitos funcionais do app desktop
+sprints/        planejamento e acompanhamento de sprints — o que o time PLANEJA fazer, semana a semana
+avaliacoes/     devolutivas oficiais do professor por entrega — nota, feedback, pontos a corrigir
 hardware/       projeto mecânico (CAD paramétrico FreeCAD, STL/STEP para impressão 3D)
   frame/        peças atuais — hub, braço (x6) e bandeja de eletrônica
   legacy/       versão anterior do frame (peça única), mantida como referência
@@ -31,8 +35,9 @@ hardware/       projeto mecânico (CAD paramétrico FreeCAD, STL/STEP para impre
 firmware/       código dos dois ESP32 (voo/FPV e telemetria/LoRa) — a especificar
 app/            aplicativo desktop de controle e monitoramento — a especificar
 notebooks/      prototipagem e análise de dados (calibração de sensores, protocolo LoRa, etc.)
-sprints/        planejamento e acompanhamento de sprints
 ```
+
+`sprints/` e `avaliacoes/` são complementares: um documenta o planejamento, o outro o resultado real de cada entrega — mantidos junto ao roadmap para não perder o histórico de evolução da nota ao longo do semestre.
 
 ## Estado atual (Rev. 1.3 do documento)
 

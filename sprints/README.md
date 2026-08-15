@@ -7,3 +7,5 @@ Planejamento e acompanhamento de sprints do projeto, semanal, de 14/08/2026 até
 - [`sprint_equipe.md`](sprint_equipe.md) — trilha paralela da equipe, aprendizado prático de montagem de drone (compra de kit, ferramentas, simulador). **Não vale nota**, não bloqueia as entregas — é preparo pra Unidade 4.
 
 Sprints a partir da 2 têm conteúdo `TBD` onde o professor ainda não divulgou o enunciado da etapa (A1/2 a A1/5) — atualizar assim que sair.
+
+Depois de cada entrega, registrar a devolutiva do professor (nota, feedback) em [`avaliacoes/`](../avaliacoes/), não aqui — este diretório é só planejamento.
