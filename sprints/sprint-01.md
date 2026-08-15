@@ -23,14 +23,6 @@ Escopo fechado: só o que o app desktop precisa ter pra essa entrega. Cada item 
 
 Detalhamento de cada requisito em [`docs/requisitos_app_desktop.md`](../docs/requisitos_app_desktop.md). Critérios de nota e pesos ficam registrados em [`avaliacoes/a1.1.md`](../avaliacoes/a1.1.md) — aqui é só a lista do que precisa ser feito.
 
-## Objetivos do drone (trilha paralela, não vale nota nesta entrega)
-
-Não bloqueia a A1/1 — avança só no tempo livre da equipe. Dimensionados pra caber de fato na janela desta sprint (14/08–17/08, ~4 dias, com o time ocupado no app), não pra fase inteira:
-
-- [ ] Fechar a lista de compras do kit de prática (`sprint_equipe.md`, Prioridades 1-3) e fazer o pedido — prazo do AliExpress é 2-6 semanas, então só pedir cedo já garante que chegue a tempo da Fase 2 (25/08); é o único item da Fase 1 que precisa sair nesta janela específica.
-- [ ] Conferir visualmente a suposição de furação do motor RS1606 (12×12mm/4×M2) em `hardware/frame/SkyVolt_Arm.stl` contra o datasheet oficial — validação de medida no papel, sem imprimir.
-- [ ] **Não** iniciar montagem, solda ou impressão em lote nesta sprint — isso é Fase 2 (25/08–14/09) de `sprint_equipe.md`, fora do escopo desta entrega.
-
 A Fase 1 completa (compra) só fecha em 24/08 — o objetivo aqui é iniciar o pedido a tempo, não terminar a fase até 17/08.
 
 ## Entrega
