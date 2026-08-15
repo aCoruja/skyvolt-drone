@@ -10,7 +10,7 @@
 
 Hexacóptero de estrutura impressa em 3D cuja função principal é medir tensão e corrente elétrica em pontos de um ambiente controlado, classificar automaticamente o tipo de circuito (AC/DC, faixa de tensão) e reportar os dados a um aplicativo desktop de controle e monitoramento em tempo real via LoRa.
 
-Projeto da disciplina 34943 — Desenvolvimento de Aplicações Computacionais (tema-base: Monitor de Consumo e Qualidade de Energia / Smart Grid), usando o SkyVolt como o protótipo físico opcional permitido pelo enunciado. Documento completo de requisitos, arquitetura e BOM em [`docs/SkyVolt_Documento.pdf`](docs/SkyVolt_Documento.pdf); requisitos funcionais do software desktop (HMI de supervisão energética) em [`docs/requisitos_app_desktop.md`](docs/requisitos_app_desktop.md). Roadmap do semestre (14/08 a 02/12/2026) em [`ideias/roadmap.md`](ideias/roadmap.md); devolutivas das entregas em [`avaliacoes/`](avaliacoes/).
+Projeto da disciplina 34943 — Desenvolvimento de Aplicações Computacionais (tema-base: Monitor de Consumo e Qualidade de Energia / Smart Grid), usando o SkyVolt como o protótipo físico opcional permitido pelo enunciado. Documento completo de requisitos, arquitetura e BOM em [`docs/SkyVolt_Documento.pdf`](docs/SkyVolt_Documento.pdf); Roadmap do semestre (14/08 a 02/12/2026) em [`ideias/roadmap.md`](ideias/roadmap.md); devolutivas das entregas em [`avaliacoes/`](avaliacoes/).
 
 ## Equipe
 
