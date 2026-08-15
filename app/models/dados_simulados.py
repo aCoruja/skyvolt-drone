@@ -16,3 +16,12 @@ def gerar_curva_consumo(pontos: int = 24) -> tuple[list[float], list[float], lis
     correntes: list[float] = []
     # TODO: preencher horas, tensoes, correntes com `pontos` amostras
     return horas, tensoes, correntes
+
+
+def potencias_da_curva(tensoes: list[float], correntes: list[float]) -> list[float]:
+    """Calcula a potência (P = V × I) ponto a ponto a partir das listas
+    retornadas por gerar_curva_consumo().
+
+    TODO(Vitoria): implementar o produto elemento a elemento.
+    """
+    raise NotImplementedError

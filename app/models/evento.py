@@ -24,3 +24,23 @@ def eventos_iniciais() -> list[Evento]:
     eventos: list[Evento] = []
     # TODO: eventos.append(Evento(data=..., hora=..., tipo=..., descricao=..., severidade=...))
     return eventos
+
+
+def criar_evento(tipo: str, descricao: str, severidade: str) -> Evento:
+    """Cria um Evento com data/hora atuais — usado pelo controller para
+    registrar eventos em tempo real (ex.: acionamento do disjuntor).
+
+    TODO(Vitoria): preencher data/hora (ex.: datetime.now() formatado como em
+    eventos_iniciais()) e retornar o Evento.
+    """
+    raise NotImplementedError
+
+
+def evento_para_linha(evento: Evento) -> list[str]:
+    """Converte um Evento na lista de strings, na mesma ordem de COLUNAS,
+    para popular uma linha do QTableWidget.
+
+    TODO(Vitoria): retornar [evento.data, evento.hora, evento.tipo,
+    evento.descricao, evento.severidade].
+    """
+    raise NotImplementedError

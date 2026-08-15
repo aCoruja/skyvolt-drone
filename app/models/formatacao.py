@@ -19,7 +19,19 @@ def formatar_potencia(valor_watts: float) -> str:
     raise NotImplementedError
 
 
+def texto_status_disjuntor(fechado: bool) -> str:
+    """TODO(Vitoria): retorna 'Fechado' ou 'Aberto'."""
+    raise NotImplementedError
+
+
 def cor_status_disjuntor(fechado: bool) -> str:
     """TODO(Vitoria): retorna cor (ex.: '#2e7d32' verde) quando fechado,
     e outra (ex.: '#c62828' vermelho) quando aberto."""
+    raise NotImplementedError
+
+
+def estilo_status_disjuntor(fechado: bool) -> str:
+    """TODO(Vitoria): retorna uma folha de estilo CSS-like pronta pra
+    QLabel.setStyleSheet(...), combinando cor_status_disjuntor() (ex.:
+    f'color: {cor_status_disjuntor(fechado)}; font-weight: bold;')."""
     raise NotImplementedError
