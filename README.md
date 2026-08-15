@@ -12,8 +12,6 @@ Hexacóptero de estrutura impressa em 3D cuja função principal é medir tensã
 
 Projeto da disciplina 34943 — Desenvolvimento de Aplicações Computacionais (tema-base: Monitor de Consumo e Qualidade de Energia / Smart Grid), usando o SkyVolt como o protótipo físico opcional permitido pelo enunciado. Documento completo de requisitos, arquitetura e BOM em [`docs/SkyVolt_Documento.pdf`](docs/SkyVolt_Documento.pdf); requisitos funcionais do software desktop (HMI de supervisão energética) em [`docs/requisitos_app_desktop.md`](docs/requisitos_app_desktop.md). Roadmap do semestre (14/08 a 02/12/2026) em [`sprints/roadmap.md`](sprints/roadmap.md); devolutivas das entregas em [`avaliacoes/`](avaliacoes/).
 
-> **Princípio orientador de escopo:** a medição é a função *core* do projeto; a plataforma voadora é secundária. **Para a entrega A1/1, o que vale nota é o app desktop (ver `sprints/sprint-01-a1.1.md`), não o drone — a integração com hardware só é exigida na Unidade 4.**
-
 ## Equipe
 
 <!-- preencher com nome + usuário GitHub de cada integrante antes da entrega A1/1 — é critério de nota (governança/git) -->
