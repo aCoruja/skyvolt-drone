@@ -7,7 +7,7 @@ Diferença em relação a `sprints/`: lá o time documenta o que **planeja** faz
 ## Índice
 
 | Entrega | Peso | Data | Status |
-|---|---|---|---|---|
+|---|---|---|---|
 | [A1/1] | 2,0 | 17/08/2026 | aguardando |
 | [A1/2] | TBD | TBD | aguardando |
 | [A1/3] | TBD | TBD | aguardando |
