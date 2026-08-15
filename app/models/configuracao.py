@@ -1,7 +1,7 @@
 # Destino no GitHub (repo skyvolt-drone): app/models/configuracao.py
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date
 
 
@@ -18,15 +18,31 @@ class ConfiguracaoSistema:
     periodo_historico: str = "24h"
     data_inicio: date = field(default_factory=date.today)
 
-    def __post_init__(self) -> None:
-        if self.tensao_minima >= self.tensao_maxima:
-            raise ValueError("tensao_minima deve ser menor que tensao_maxima")
-        if self.corrente_maxima <= 0:
-            raise ValueError("corrente_maxima deve ser positiva")
-        if self.intervalo_leitura_s <= 0:
-            raise ValueError("intervalo_leitura_s deve ser positivo")
-        if self.periodo_historico not in self.PERIODOS_DISPONIVEIS:
-            raise ValueError(f"periodo_historico inválido: {self.periodo_historico}")
-
     def esta_dentro_da_faixa(self, tensao: float, corrente: float) -> bool:
         return self.tensao_minima <= tensao <= self.tensao_maxima and corrente <= self.corrente_maxima
+
+
+def configuracao_padrao() -> ConfiguracaoSistema:
+    """Retorna a ConfiguracaoSistema com os valores padrão do sistema."""
+    return ConfiguracaoSistema()
+
+
+def copiar_configuracao(configuracao: ConfiguracaoSistema) -> ConfiguracaoSistema:
+    """Retorna uma cópia independente de `configuracao` (usada pelo dialog, que só
+    deve alterar o original se o usuário confirmar)."""
+    return replace(configuracao)
+
+
+def validar_configuracao(configuracao: ConfiguracaoSistema) -> list[str]:
+    """Valida os campos de `configuracao`. Retorna a lista de mensagens de erro
+    (vazia se a configuração for válida)."""
+    erros: list[str] = []
+    if configuracao.tensao_minima >= configuracao.tensao_maxima:
+        erros.append("A tensão mínima deve ser menor que a tensão máxima.")
+    if configuracao.corrente_maxima <= 0:
+        erros.append("A corrente máxima deve ser positiva.")
+    if configuracao.intervalo_leitura_s <= 0:
+        erros.append("O intervalo de leitura deve ser positivo.")
+    if configuracao.periodo_historico not in ConfiguracaoSistema.PERIODOS_DISPONIVEIS:
+        erros.append(f"Período inválido: {configuracao.periodo_historico}.")
+    return erros
