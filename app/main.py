@@ -11,6 +11,12 @@ from app.controllers.main_controller import criar_janela_principal
 def main() -> int:
     app = QApplication(sys.argv)
     # TODO: app.setStyleSheet(...) carregando app/ui/estilo.qss quando disponível (Moura)
+    try:
+        with open("app/ui/estilo.qss", "r", encoding="utf-8") as f:
+            app.setStyleSheet(f.read())
+    except FileNotFoundError:
+        print("Aviso: Arquivo de estilo não encontrado.")
+
     janela = criar_janela_principal()
     janela.show()
     return app.exec_()
