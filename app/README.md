@@ -1,10 +1,10 @@
-# ⚡ SKYVOLT - Estação de Controle e Monitoramento Desktop
+#  SKYVOLT - Estação de Controle e Monitoramento Desktop
 
 O **SKYVOLT** é um aplicativo desktop desenvolvido como entregável central da disciplina. Ele funciona como uma estação de controle e monitoramento, projetada para receber telemetria em tempo real via comunicação de rádio **LoRa** e apresentar dados críticos em um painel interativo.
 
 ---
 
-## 📋 Descrição do Projeto
+##  Descrição do Projeto
 
 O sistema é responsável por capturar, processar e apresentar as seguintes grandezas elétricas e físicas:
 *   **Tensão** (V)
@@ -13,7 +13,7 @@ O sistema é responsável por capturar, processar e apresentar as seguintes gran
 *   **Classificação do estado da rede** (Normal, Sobrecarga, Subtensão, etc.)
 ---
 
-## 🎯 Requisitos e Funcionalidades
+##  Requisitos e Funcionalidades
 
 O escopo completo do projeto está distribuído nos seguintes documentos internos do repositório:
 
@@ -23,7 +23,7 @@ O escopo completo do projeto está distribuído nos seguintes documentos interno
 
 ---
 
-## 🛠️ Stack Tecnológica (Desktop App)
+##  Stack Tecnológica (Desktop App)
 
 A interface gráfica foi estruturada com:
 
