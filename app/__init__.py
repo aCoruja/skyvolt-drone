@@ -26,7 +26,7 @@ banner = f"""
 {YELLOW}{BOLD} 👥 EQUIPE DE DESENVOLVIMENTO:{RESET}
   ⚡ {WHITE}Matheus Dapper{RESET}
   ⚡ {WHITE}Vitoria{RESET}
-  ⚡ {WHITE}Robertson Moura{RESET}
+  ⚡ {WHITE}Sofia Moura(Robertson){RESET}
 
 {CYAN} ───────────────────────────────────────────────────────────────{RESET}
  🚀 {GREEN}{BOLD}Iniciando aplicação gráfica PyQt5...{RESET}
