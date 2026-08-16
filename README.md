@@ -16,7 +16,7 @@ Projeto da disciplina 34943 — Desenvolvimento de Aplicações Computacionais (
 
 <!-- preencher com nome + usuário GitHub de cada integrante antes da entrega A1/1 — é critério de nota (governança/git) -->
 - Matheus Dapper ([@aCoruja](https://github.com/aCoruja))
-- _adicionar demais integrantes aqui_
+- _Vitória Aparecida Vendausen([@Viihvendausen](https://github.com/Viihvendausen)_
 
 ## Estrutura do repositório
 
