@@ -23,7 +23,7 @@ O escopo completo do projeto está distribuído nos seguintes documentos interno
 
 ---
 
-##  Stack Tecnológica (Desktop App)
+## (Desktop App)
 
 A interface gráfica foi estruturada com:
 
