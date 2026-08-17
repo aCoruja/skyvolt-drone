@@ -69,3 +69,8 @@ Gerado pelo script paramétrico [`skyvolt_frame.py`](hardware/frame/skyvolt_fram
 </div>
 
 Todas as peças cabem numa mesa de impressão de 220×220mm. Hub e braço se unem por encaixe lingueta/rasgo + 2 parafusos M3 por junta; motor RS1606 3300KV (pad 12×12mm/4×M2); braço já sai com base de fixação para servo SG90.
+
+
+## Utilização de IA
+
+A utilização de IA foi realizada de forma educativa e colaborativa, com fins de estudo. A ferramenta não foi utilizada para resolver os problemas sem a aplicação de raciocínio lógico e compreensão por parte dos autores.
