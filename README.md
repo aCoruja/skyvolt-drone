@@ -18,7 +18,7 @@ Projeto da disciplina 34943 — Desenvolvimento de Aplicações Computacionais (
 - Matheus Dapper ([@aCoruja](https://github.com/aCoruja))
 - _Vitória Aparecida Vendausen([@Viihvendausen](https://github.com/Viihvendausen)_
 
-- _Sophia Gama de Moura ([@/Sophthe141](https://github.com/Sophthe141))_
+- _Sophia Gama de Moura ([@Sophthe141](https://github.com/Sophthe141))_
 
 ## Estrutura do repositório
 
