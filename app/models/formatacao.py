@@ -34,3 +34,28 @@ def estilo_status_disjuntor(fechado: bool) -> str:
     """Retorna uma folha de estilo CSS-like pronta pra QLabel.setStyleSheet(...),
     combinando cor_status_disjuntor()."""
     return f"color: {cor_status_disjuntor(fechado)}; font-weight: bold;"
+
+
+def estilo_qualidade(qualidade: str) -> str:
+    """Retorna uma folha de estilo CSS-like pronta pra QLabel.setStyleSheet(...):
+    verde para 'Normal', amarelo para 'Circuito aberto', vermelho para qualquer
+    outro estado (ex.: 'Fora da faixa')."""
+    if qualidade == "Normal":
+        cor = "#2e7d32"
+    elif qualidade == "Circuito aberto":
+        cor = "#f9a825"
+    else:
+        cor = "#c62828"
+    return f"color: {cor}; font-weight: bold;"
+
+
+def texto_status_conexao(conectado: bool) -> str:
+    """Retorna 'Conectado' ou 'Desconectado' — status simulado do painel de recepção."""
+    return "Conectado" if conectado else "Desconectado"
+
+
+def estilo_status_conexao(conectado: bool) -> str:
+    """Retorna estilo CSS pronto pra QLabel.setStyleSheet(...): verde quando
+    conectado, cinza neutro quando desconectado (não é um estado de alarme)."""
+    cor = "#2e7d32" if conectado else "#6b7280"
+    return f"color: {cor}; font-weight: bold;"
