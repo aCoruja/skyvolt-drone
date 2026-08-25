@@ -70,6 +70,28 @@ Gerado pelo script paramétrico [`skyvolt_frame.py`](hardware/frame/skyvolt_fram
 
 Todas as peças cabem numa mesa de impressão de 220×220mm. Hub e braço se unem por encaixe lingueta/rasgo + 2 parafusos M3 por junta; motor RS1606 3300KV (pad 12×12mm/4×M2); braço já sai com base de fixação para servo SG90.
 
+### Peças novas (em revisão)
+
+Ainda pendentes de validação de fit e dimensões finais — ver [`hardware/frame/README.md`](hardware/frame/README.md).
+
+<div align="center">
+<table>
+<tr>
+<td align="center" width="33%">
+<img src="hardware/previews/SkyVolt_Frame_preview.png" width="100%"><br>
+<b>Frame</b>
+</td>
+<td align="center" width="33%">
+<img src="hardware/previews/SkyVolt_HubLid_preview.png" width="100%"><br>
+<b>Tampa do hub (Hub Lid)</b>
+</td>
+<td align="center" width="33%">
+<img src="hardware/previews/SkyVolt_ClampAssembly_preview.png" width="100%"><br>
+<b>Verificação do encaixe</b> — render de checagem
+</td>
+</tr>
+</table>
+</div>
 
 ## Utilização de IA
 
