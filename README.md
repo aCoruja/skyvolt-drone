@@ -70,24 +70,16 @@ Gerado pelo script paramétrico [`skyvolt_frame.py`](hardware/frame/skyvolt_fram
 
 Todas as peças cabem numa mesa de impressão de 220×220mm. Hub e braço se unem por encaixe lingueta/rasgo + 2 parafusos M3 por junta; motor RS1606 3300KV (pad 12×12mm/4×M2); braço já sai com base de fixação para servo SG90.
 
-### Peças novas (em revisão)
+### Peça nova (em revisão)
 
-Ainda pendentes de validação de fit e dimensões finais — ver [`hardware/frame/README.md`](hardware/frame/README.md).
+Ainda pendente de validação de fit e dimensões finais — ver [`hardware/frame/README.md`](hardware/frame/README.md).
 
 <div align="center">
-<table>
-<tr>
-<td align="center" width="50%">
-<img src="hardware/previews/SkyVolt_Frame_preview.png" width="100%"><br>
-<b>Frame</b> — 1×
-</td>
-<td align="center" width="50%">
-<img src="hardware/previews/SkyVolt_HubLid_preview.png" width="100%"><br>
+<img src="hardware/previews/SkyVolt_HubLid_preview.png" width="33%"><br>
 <b>Tampa do hub (Hub Lid)</b> — 1×
-</td>
-</tr>
-</table>
 </div>
+
+> `SkyVolt_Frame.*` também foi gerado, mas o bounding box real (330×290,3mm) bate com o frame legado de peça única — não cabe na mesa de 220×220mm. Movido para [`hardware/legacy/`](hardware/legacy/) em vez de entrar na lista de peças a imprimir.
 
 ## Utilização de IA
 
