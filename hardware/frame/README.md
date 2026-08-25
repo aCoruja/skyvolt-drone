@@ -14,4 +14,15 @@
 
 Gerado pelo script paramétrico `skyvolt_frame.py` (FreeCAD, `freecad.cmd skyvolt_frame.py`). `SkyVolt_Assembly_Preview.*` é só visualização (hub + 6 braços + bandeja posicionados), não é peça de impressão.
 
+## Peças novas (em revisão)
+
+| Peça | Arquivo | Script |
+|---|---|---|
+| Frame | `SkyVolt_Frame.stl` | `skyvolt_frame.py` (script local, ainda não é o mesmo `skyvolt_frame.py` acima — parâmetros distintos, precisa reconciliação) |
+| Tampa do hub (Hub Lid) | `SkyVolt_HubLid.stl` | `skyvolt_hub_lid.py` |
+
+`SkyVolt_ClampAssembly_preview.png` / `SkyVolt_ClampAssembly_check.svg` (em `../previews/`) são renders de verificação do encaixe da tampa nas linguetas do braço/hub, gerados junto com a Hub Lid.
+
+Fit, encaixe com as peças existentes e dimensões finais ainda não confirmados — pendente de validação antes de imprimir.
+
 Hub e braço se unem por encaixe lingueta/rasgo + 2 parafusos M3 por junta. Motor: RS1606 3300KV, pad com padrão de furação 12×12mm/4×M2 (assumido para a classe do motor — confirmar contra datasheet real antes de imprimir em lote, ver Seção 8 do documento). Braço já sai com base de fixação para servo SG90 (M2, 32,5mm de espaçamento). Bandeja carrega 2×ESP32-S3 (trilho dimensionado para o footprint oficial 70×28mm) e 2×módulo LoRa (baia genérica por abraçadeira, footprint do módulo ainda não confirmado).
