@@ -77,17 +77,13 @@ Ainda pendentes de validação de fit e dimensões finais — ver [`hardware/fra
 <div align="center">
 <table>
 <tr>
-<td align="center" width="33%">
+<td align="center" width="50%">
 <img src="hardware/previews/SkyVolt_Frame_preview.png" width="100%"><br>
-<b>Frame</b>
+<b>Frame</b> — 1×
 </td>
-<td align="center" width="33%">
+<td align="center" width="50%">
 <img src="hardware/previews/SkyVolt_HubLid_preview.png" width="100%"><br>
-<b>Tampa do hub (Hub Lid)</b>
-</td>
-<td align="center" width="33%">
-<img src="hardware/previews/SkyVolt_ClampAssembly_preview.png" width="100%"><br>
-<b>Verificação do encaixe</b> — render de checagem
+<b>Tampa do hub (Hub Lid)</b> — 1×
 </td>
 </tr>
 </table>
