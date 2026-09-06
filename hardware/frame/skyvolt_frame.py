@@ -3,7 +3,9 @@ import FreeCAD, Part, math, os
 out_dir = "/home/acoruja/Documentos/Projeto_Desenvolvimento/SkyVolt/hardware/frame"
 
 # ---------------------------------------------------------------------------
-# PARAMETROS (mm) - Rev.2: motor RS1606 3300KV real, frame modular (mesa 220x220)
+# PARAMETROS (mm) - Rev.3: motor A2212 1000kV confirmado (can 27.5x27mm,
+# eixo 3.17mm, furacao 16x19mm/M3 - medido no motor real), frame modular
+# (mesa 220x220)
 # ---------------------------------------------------------------------------
 HUB_VERTEX_R      = 70.0
 HUB_THK           = 6.0
@@ -22,10 +24,11 @@ TAB_BOLT_HOLE_D   = 3.2            # M3 folga
 TAB_BOLT_R1       = SHOULDER_R - 8.0
 TAB_BOLT_R2       = SHOULDER_R - 18.0
 
-MOTOR_PAD_R          = 12.0    # disco de fixacao do motor RS1606 (pequeno)
-MOTOR_SQUARE_HALF    = 6.0     # padrao de furacao 12x12mm (M2) - verificar contra datasheet real antes de imprimir
-MOTOR_BOLT_HOLE_D    = 2.2     # M2 folga
-MOTOR_CENTER_HOLE_D  = 6.0     # eixo/fios
+MOTOR_PAD_R          = 17.0    # disco de fixacao do motor A2212 (can 27.5mm de diametro)
+MOTOR_HOLE_DX        = 8.0     # metade do padrao de furacao real, eixo ao longo do braco (16mm)
+MOTOR_HOLE_DY        = 9.5     # metade do padrao de furacao real, eixo transversal ao braco (19mm)
+MOTOR_BOLT_HOLE_D    = 3.2     # M3 folga
+MOTOR_CENTER_HOLE_D  = 6.0     # eixo (3.17mm) + fios, com folga
 
 STANDOFF_R        = 32.0
 STANDOFF_HOLE_D    = 3.4
@@ -289,13 +292,13 @@ def build_arm():
     body = body.fuse(boss)
     body = body.removeSplitter()
 
-    # furos: motor (4x M2 padrao quadrado + centro), lingueta (2x M3) e servo (2x M2)
+    # furos: motor (4x M3 padrao retangular 16x19mm + centro), lingueta (2x M3) e servo (2x M2)
     hole_tools = []
     hole_tools.append(Part.makeCylinder(MOTOR_CENTER_HOLE_D / 2.0, ARM_THK + 4, tip_c + FreeCAD.Vector(0, 0, -2)))
     for sx in (-1, 1):
         for sy in (-1, 1):
-            hx = tip_c.x + sx * MOTOR_SQUARE_HALF
-            hy = tip_c.y + sy * MOTOR_SQUARE_HALF
+            hx = tip_c.x + sx * MOTOR_HOLE_DX
+            hy = tip_c.y + sy * MOTOR_HOLE_DY
             hole_tools.append(Part.makeCylinder(MOTOR_BOLT_HOLE_D / 2.0, ARM_THK + 4, FreeCAD.Vector(hx, hy, -2)))
     for r_bolt in (TAB_BOLT_R1, TAB_BOLT_R2):
         hole_tools.append(Part.makeCylinder(TAB_BOLT_HOLE_D / 2.0, ARM_THK + 4, FreeCAD.Vector(r_bolt, 0.0, -2)))

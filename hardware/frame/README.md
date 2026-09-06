@@ -9,7 +9,7 @@
 | Peça | Arquivo | Qtd | Dimensões |
 |---|---|---|---|
 | Hub | `SkyVolt_Hub.stl` | 1 | 129,6×121,2mm |
-| Braço | `SkyVolt_Arm.stl` | 6 | 154×26mm |
+| Braço | `SkyVolt_Arm.stl` | 6 | 159×34mm |
 | Bandeja de eletrônica | `SkyVolt_Tray.stl` | 1 | 150×80mm |
 
 Gerado pelo script paramétrico `skyvolt_frame.py` (FreeCAD, `freecad.cmd skyvolt_frame.py`). `SkyVolt_Assembly_Preview.*` é só visualização (hub + 6 braços + bandeja posicionados), não é peça de impressão.
@@ -26,4 +26,4 @@ Fit, encaixe com as peças existentes e dimensões finais ainda não confirmados
 
 Havia também um `SkyVolt_Frame.*` aqui, mas o bounding box real (330×290,3mm) confirmou que é o mesmo tamanho do frame legado de peça única — não cabe na mesa de 220×220mm. Movido para [`hardware/legacy/`](../legacy/).
 
-Hub e braço se unem por encaixe lingueta/rasgo + 2 parafusos M3 por junta. Motor: RS1606 3300KV, pad com padrão de furação 12×12mm/4×M2 (assumido para a classe do motor — confirmar contra datasheet real antes de imprimir em lote, ver Seção 8 do documento). Braço já sai com base de fixação para servo SG90 (M2, 32,5mm de espaçamento). Bandeja carrega 2×ESP32-S3 (trilho dimensionado para o footprint oficial 70×28mm) e 2×módulo LoRa (baia genérica por abraçadeira, footprint do módulo ainda não confirmado).
+Hub e braço se unem por encaixe lingueta/rasgo + 2 parafusos M3 por junta. Motor: **A2212 1000kV** (confirmado — can 27,5×27mm, eixo 3,17mm, furação 16×19mm/4×M3, medido no motor real). Pad de fixação do motor aumentado para 17mm de raio pra cobrir esse padrão com folga de parede — `SkyVolt_Arm.stl`/`.step` já regerados e conferidos (furos exatos em 190±8/±9,5mm, raio 1,6mm; disco até x=207mm; bounding box atualizado na tabela acima). Braço já sai com base de fixação para servo SG90 (M2, 32,5mm de espaçamento). Bandeja carrega 2×ESP32-S3 (trilho dimensionado para o footprint oficial 70×28mm) e 2×módulo LoRa (baia genérica por abraçadeira, footprint do módulo ainda não confirmado).
