@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 def obter_diretorio_base() -> str:
-    """Localiza a pasta raiz do projeto de forma robusta em qualquer sistema operacional."""
+    """Calcula a raiz do projeto de forma agnóstica ao sistema operacional."""
     dir_arquivo = os.path.dirname(os.path.abspath(__file__))
     dir_pai = os.path.dirname(dir_arquivo)
     if os.path.basename(dir_pai) == "app":
@@ -23,9 +23,9 @@ class Database:
     @staticmethod
     def get_connection() -> sqlite3.Connection:
         """Retorna uma conexão ativa com o SQLite configurada com:
-        - timeout=10.0 (previne bloqueios de concorrência);
-        - row_factory=sqlite3.Row (acesso por nome de coluna);
-        - PRAGMA foreign_keys = ON (ativação mandatória da integridade referencial).
+        - timeout=10.0 (prevenção contra deadlocks/bloqueios de concorrência);
+        - row_factory=sqlite3.Row (acesso seguro por nome de coluna);
+        - PRAGMA foreign_keys = ON (ativação obrigatória de chaves estrangeiras).
         """
         os.makedirs(DATA_DIR, exist_ok=True)
         conn = sqlite3.connect(DB_PATH, timeout=10.0)
@@ -35,8 +35,8 @@ class Database:
 
     @staticmethod
     def init_db() -> None:
-        """Inicializa o banco smartgrid.db criando o esquema relacional
-        com restrições PRIMARY KEY, NOT NULL e restrições CHECK."""
+        """Inicializa automaticamente o banco smartgrid.db, criando o esquema
+        relacional com todas as constraints explícitas (PRIMARY KEY, NOT NULL, CHECK)."""
         os.makedirs(DATA_DIR, exist_ok=True)
         conn = Database.get_connection()
 
@@ -56,7 +56,7 @@ class Database:
                 """
             )
 
-            # 2. Tabela de Histórico de Eventos permanente
+            # 2. Tabela de Histórico de Eventos permanente da QTableWidget
             cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS historico_eventos (
@@ -88,7 +88,7 @@ class Database:
                 """
             )
 
-            # Sementes iniciais: Disjuntor Principal e Relé de Emergência
+            # Sementes iniciais idempotentes: Disjuntor Principal e Relé de Emergência
             agora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             cursor.execute(
                 """
