@@ -13,19 +13,19 @@ logger = logging.getLogger("smartgrid")
 logger.setLevel(logging.INFO)
 
 if not logger.handlers:
-    # Formatação com carimbo de data/hora (timestamp), severidade e descrição
+    # Formatação padronizada: [TIMESTAMP] [SEVERIDADE] Descrição
     formatter = logging.Formatter(
         fmt="%(asctime)s [%(levelname)s] %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
-    # Gravador no arquivo permanente logs/smartgrid.log
+    # Gravador permanente em arquivo
     file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.INFO)
     logger.addHandler(file_handler)
 
-    # Gravador no console
+    # Gravador simultâneo no terminal/console
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
     console_handler.setLevel(logging.INFO)
