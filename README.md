@@ -47,6 +47,14 @@ O frame do protótipo passou a ser o **S500** (kit comercial de 500mm, com trem 
 <img src="hardware/previews/Hexa_vs_S500_side.svg" alt="Comparação lateral: hexa impresso com motores alternados e S500 com todos os motores para cima" width="820">
 </div>
 
+### Por que trocamos
+
+O hexa impresso tinha 6 braços com alturas alternadas: 3 motores em cima (riser de 40mm) e 3 **invertidos embaixo do braço**. Nos testes com a Pixhawk ele **não saiu do chão**:
+
+- **Com ~82% de acelerador não decolou.** A bateria caiu de 12,44V para 9,73V: os motores puxavam muita corrente e geravam pouco empuxo. A suspeita principal são as **hélices dos motores invertidos montadas ao contrário**, soprando para cima e anulando as de cima. É um erro fácil de cometer em motor de cabeça para baixo.
+- **Hélices de baixo a poucos centímetros do chão.** O ar batia no chão e voltava como redemoinho, causando turbulência e o aviso *"EKF attitude is bad"* na tentativa de decolagem.
+- **Configuração frágil.** O layout fora do padrão exigiu orientação customizada da Pixhawk (yaw 180° + pitch 10° para compensar a placa inclinada), mapeamento manual saída → motor e uma correção de Y6 para Hexa +. Cada ajuste era uma nova chance de erro.
+
 <div align="center">
 <table>
 <tr>
@@ -63,14 +71,6 @@ O frame do protótipo passou a ser o **S500** (kit comercial de 500mm, com trem 
 </tr>
 </table>
 </div>
-
-### Por que trocamos
-
-O hexa impresso tinha 6 braços com alturas alternadas: 3 motores em cima (riser de 40mm) e 3 **invertidos embaixo do braço**. Nos testes com a Pixhawk ele **não saiu do chão**:
-
-- **Com ~82% de acelerador não decolou.** A bateria caiu de 12,44V para 9,73V: os motores puxavam muita corrente e geravam pouco empuxo. A suspeita principal são as **hélices dos motores invertidos montadas ao contrário**, soprando para cima e anulando as de cima. É um erro fácil de cometer em motor de cabeça para baixo.
-- **Hélices de baixo a poucos centímetros do chão.** O ar batia no chão e voltava como redemoinho, causando turbulência e o aviso *"EKF attitude is bad"* na tentativa de decolagem.
-- **Configuração frágil.** O layout fora do padrão exigiu orientação customizada da Pixhawk (yaw 180° + pitch 10° para compensar a placa inclinada), mapeamento manual saída → motor e uma correção de Y6 para Hexa +. Cada ajuste era uma nova chance de erro.
 
 O S500 resolve isso por ser o formato padrão:
 
