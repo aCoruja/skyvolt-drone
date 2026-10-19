@@ -140,6 +140,7 @@ class MainController(QMainWindow, Ui_MainWindow):
         self.tblEventos.setColumnCount(len(COLUNAS))
         self.tblEventos.setHorizontalHeaderLabels(COLUNAS)
         self.tblEventos.horizontalHeader().setStretchLastSection(True)
+        self.tblEventos.verticalHeader().setVisible(False)  # a coluna ID já numera as linhas
 
     def carregar_eventos_do_banco(self) -> None:
         """Preenche a QTableWidget com o histórico do SQLite (Repository.listar_todos)."""
