@@ -31,7 +31,7 @@ avaliacoes/     devolutivas oficiais do professor por entrega — nota, feedback
 hardware/       projeto mecânico (CAD paramétrico FreeCAD, STL/STEP para impressão 3D)
   frame/        hexa impresso Rev. 1.3 (hub, braço x6, bandeja) — substituído pelo S500, ver abaixo
   legacy/       versão anterior do frame (peça única), mantida como referência
-  previews/     renders das peças e esquemas do S500
+  previews/     renders das peças, esquemas do S500 e fotos de referência (fotos/, com créditos)
 firmware/       código dos dois ESP32 (voo/FPV e telemetria/LoRa) — a especificar
 app/            aplicativo desktop de controle e monitoramento — a especificar
 notebooks/      prototipagem e análise de dados (calibração de sensores, protocolo LoRa, etc.)
@@ -45,6 +45,23 @@ O frame do protótipo passou a ser o **S500** (kit comercial de 500mm, com trem 
 
 <div align="center">
 <img src="hardware/previews/Hexa_vs_S500_side.svg" alt="Comparação lateral: hexa impresso com motores alternados e S500 com todos os motores para cima" width="820">
+</div>
+
+<div align="center">
+<table>
+<tr>
+<td align="center" width="50%">
+<img src="hardware/previews/fotos/S500_Holybro_foto.jpg" width="100%" alt="Foto de um quadricóptero S500 montado, com trem de pouso alto"><br>
+<b>S500</b> — o frame escolhido: braços longos e trem de pouso alto<br>
+<sub>Foto: <a href="https://commons.wikimedia.org/wiki/File:Holybro_S500_Edition_2015_(FA3KAETHRC)_(1-23-2025).jpg">ZLEA</a>, CC BY-SA 4.0</sub>
+</td>
+<td align="center" width="50%">
+<img src="hardware/previews/fotos/F450_foto.jpg" width="100%" alt="Foto de um quadricóptero F450 montado"><br>
+<b>F450</b> — a alternativa descartada: hélices de 10" ficam apertadas<br>
+<sub>Foto: <a href="https://commons.wikimedia.org/wiki/File:F450-DJI-Futaba.JPG">Alexey M.</a>, CC BY-SA 4.0</sub>
+</td>
+</tr>
+</table>
 </div>
 
 ### Por que trocamos
