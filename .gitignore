@@ -32,7 +32,9 @@ dist/
 logs/
 
 
-# SO
+# IDEs & Sistema "Operacional"
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
 
