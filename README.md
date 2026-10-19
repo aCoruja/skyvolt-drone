@@ -60,12 +60,12 @@ O hexa impresso tinha 6 braços com alturas alternadas: 3 motores em cima (riser
 <tr>
 <td align="center" width="50%">
 <img src="hardware/previews/fotos/S500_Holybro_foto.jpg" width="100%" alt="Foto de um quadricóptero S500 montado, com trem de pouso alto"><br>
-<b>S500</b> — a alternativa considerada: braços longos e trem de pouso alto<br>
+<b>S500</b> — o frame escolhido: braços longos e trem de pouso alto<br>
 <sub>Foto: <a href="https://commons.wikimedia.org/wiki/File:Holybro_S500_Edition_2015_(FA3KAETHRC)_(1-23-2025).jpg">ZLEA</a>, CC BY-SA 4.0</sub>
 </td>
 <td align="center" width="50%">
 <img src="hardware/previews/fotos/F450_foto.jpg" width="100%" alt="Foto de um quadricóptero F450 montado"><br>
-<b>F450</b> — o frame escolhido: menor (450mm) e trem de pouso relativamente baixo<br>
+<b>F450</b> — a alternativa considerada: menor (450mm) e trem de pouso relativamente baixo<br>
 <sub>Foto: <a href="https://commons.wikimedia.org/wiki/File:F450-DJI-Futaba.JPG">Alexey M.</a>, CC BY-SA 4.0</sub>
 </td>
 </tr>
