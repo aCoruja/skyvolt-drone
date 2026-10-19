@@ -8,9 +8,9 @@ Diferença em relação a `ideias/`: lá o time documenta o que **planeja** faze
 
 | Entrega | Peso | Data | Status |
 |---|---|---|---|
-| [A1/1] | 2,0 | 17/08/2026 | aguardando |
-| [A1/2] | TBD | TBD | aguardando |
-| [A1/3] | TBD | TBD | aguardando |
-| [A1/4] | TBD | TBD | aguardando |
-| [A1/5] | TBD | TBD | aguardando |
-| [Apresentação final] | TBD | 01–02/12/2026 | — | aguardando |
+| [A1/1](A1-1/README.md) | 2,0 | 17/08/2026 | Feito |
+| A1/2 | TBD | TBD | aguardando |
+| A1/3 | TBD | TBD | aguardando |
+| A1/4 | TBD | TBD | aguardando |
+| A1/5 | TBD | TBD | aguardando |
+| Apresentação final | TBD | 01–02/12/2026 | aguardando |

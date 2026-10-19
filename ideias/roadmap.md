@@ -4,7 +4,7 @@ Semanal, alinhado ao calendário oficial da disciplina (34943 — Desenvolviment
 
 | Sprint | Período | Marco do professor | Foco | Status |
 |---|---|---|---|---|
-| 1 | 14/08 – 17/08 | **A1/1** (Aula 04) | App desktop PyQt, arquitetura MVC, dashboard com dados simulados — ver `sprint-01-a1.1.md` | a fazer |
+| 1 | 14/08 – 17/08 | **A1/1** (Aula 04) | App desktop PyQt, arquitetura MVC, dashboard com dados simulados — ver `sprint-01-a1.1.md` e [`avaliacoes/A1-1`](../avaliacoes/A1-1/README.md) | feito |
 | 2 | 18/08 – 24/08 | — | Retro da A1/1 (nota, feedback do professor) + início Unidade 2 (Aula 05, 31/08) | a fazer |
 | 3 | 25/08 – 31/08 | Aula 05 | Conteúdo de Unidade 2 em sala — TBD | a fazer |
 | 4 | 01/09 – 07/09 | — | Preparação A1/2 — TBD (aguardando enunciado) | a fazer |
