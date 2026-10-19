@@ -11,7 +11,7 @@ WHITE = "\033[97m"
 BOLD = "\033[1m"
 RESET = "\033[0m"
 
-banner = f"""
+banner = rf"""
 {BLUE}{BOLD}   _____ _  __ __     __{YELLOW}      __  ____  _      _______ 
 {BLUE}{BOLD}  / ____| |/ / \ \   / / {YELLOW}     \ \  / / / __ \| |    |__   __|
 {BLUE}{BOLD} | (___ | ' /   \ \_/ /  {YELLOW}      \ \/ / | |  | | |       | |   
