@@ -1,6 +1,9 @@
-# FreeCAD
+# Hardware & FreeCAD
 *.FCBak
 *.FCStd1
+*.~FCStd
+*.FCStd?
+*.tmp
 
 # LaTeX build artifacts
 *.aux
