@@ -57,7 +57,7 @@ O frame do protótipo passou a ser o **S500** (kit comercial de 500mm, com trem 
 </td>
 <td align="center" width="50%">
 <img src="hardware/previews/fotos/F450_foto.jpg" width="100%" alt="Foto de um quadricóptero F450 montado"><br>
-<b>F450</b> — a alternativa descartada: hélices de 10" ficam apertadas<br>
+<b>F450</b> — a alternativa considerada: menor (450mm) e sem trem de pouso alto de série<br>
 <sub>Foto: <a href="https://commons.wikimedia.org/wiki/File:F450-DJI-Futaba.JPG">Alexey M.</a>, CC BY-SA 4.0</sub>
 </td>
 </tr>
@@ -75,7 +75,7 @@ O hexa impresso tinha 6 braços com alturas alternadas: 3 motores em cima (riser
 O S500 resolve isso por ser o formato padrão:
 
 - **Todos os motores para cima.** Não há hélice invertida nem ar rebatido no chão, e o **trem de pouso alto** deixa as hélices longe do solo e abre espaço para a bateria embaixo.
-- **Dimensionado para hélice de 10".** Os motores ficam a ~480mm na diagonal, com **~85mm de folga** entre hélices vizinhas (no F450, a alternativa mais barata, a folga é de só 1–2cm).
+- **Dimensionado para hélice de 10".** Os motores ficam a ~480mm na diagonal, com **~85mm de folga** entre hélices vizinhas (no F450, a alternativa mais barata, seriam ~64mm: também voa, mas com menos margem).
 - **Compatível com o que já temos.** O anúncio recomenda motor 2212 ~1000kV, hélice 1045/1047 e bateria 3S–4S, exatamente o nosso conjunto. A furação 16×19mm dos braços serve no A2212.
 - **Configuração simples no ArduCopter.** Quad X tem os melhores parâmetros de fábrica, e a Pixhawk vai reta sobre amortecedores, sem rotação customizada.
 - **Peças de reserva.** Dos 6 motores e ESCs A2212, sobram 2 de cada.
