@@ -26,3 +26,10 @@ logs/
 # SO
 .DS_Store
 Thumbs.db
+
+# ESP32 / PlatformIO / Firmware
+.pio/
+.pioenvs/
+.piolibdeps/
+.clangd/
+sdkconfig.old
