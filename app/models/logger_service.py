@@ -4,6 +4,8 @@ import logging
 import os
 from app.database.connection import BASE_DIR
 
+# smartgrid.log: trilha de auditoria com timestamp, severidade e descrição
+
 LOG_DIR = os.path.join(BASE_DIR, "logs")
 LOG_FILE = os.path.join(LOG_DIR, "smartgrid.log")
 

@@ -1,9 +1,16 @@
-# Destino no GitHub (repo skyvolt-drone): app/models/configuracao.py
 from __future__ import annotations
 
-from dataclasses import dataclass, field, replace
+import json
+import os
+from dataclasses import asdict, dataclass, field, replace
 from datetime import date
 from typing import ClassVar
+
+from app.database.connection import DATA_DIR
+from app.models.logger_service import log_info, log_warning
+
+CONFIG_JSON_PATH = os.path.join(DATA_DIR, "config.json")
+CONFIG_JSON_NOME = "data/config.json"  # caminho curto usado nas mensagens de log
 
 
 @dataclass
@@ -47,6 +54,15 @@ class ConfiguracaoSistema:
         return tensao_ok and corrente <= self.corrente_maxima
 
 
+@dataclass
+class ParametrosSerial:
+    """Parâmetros do painel de comunicação serial (configuração local do drone)."""
+
+    porta_com: str = "COM1"
+    baud_rate: str = "9600"
+    timeout_s: int = 5
+
+
 def configuracao_padrao() -> ConfiguracaoSistema:
     """Retorna a ConfiguracaoSistema com os valores padrão do sistema — usada ao abrir o
     app, antes do usuário editar qualquer coisa via ConfigDialog."""
@@ -64,6 +80,16 @@ def validar_configuracao(configuracao: ConfiguracaoSistema) -> list[str]:
     (lista vazia significa configuração válida, pronta para ser aplicada)."""
     erros: list[str] = []
 
+    campos_nao_negativos = {
+        "Tensão mínima AC": configuracao.tensao_minima_ac,
+        "Tensão máxima AC": configuracao.tensao_maxima_ac,
+        "Tensão mínima DC": configuracao.tensao_minima_dc,
+        "Tensão máxima DC": configuracao.tensao_maxima_dc,
+    }
+    for nome, valor in campos_nao_negativos.items():
+        if valor < 0:
+            erros.append(f"{nome} não pode ser negativa ({valor}).")
+
     if configuracao.tensao_minima_ac >= configuracao.tensao_maxima_ac:
         erros.append("A tensão mínima AC deve ser menor que a tensão máxima AC.")
     if configuracao.tensao_minima_dc >= configuracao.tensao_maxima_dc:
@@ -78,3 +104,73 @@ def validar_configuracao(configuracao: ConfiguracaoSistema) -> list[str]:
         erros.append(f"Período inválido: {configuracao.periodo_historico}.")
 
     return erros
+
+
+def carregar_parametros_json() -> tuple[ConfiguracaoSistema, ParametrosSerial]:
+    """Lê data/config.json. Se o arquivo não existir (os.path.exists), cria-o com os
+    valores default. Se estiver corrompido ou com valores inválidos, registra WARNING
+    e usa os defaults (o arquivo é regravado no próximo salvamento)."""
+    if not os.path.exists(CONFIG_JSON_PATH):
+        log_warning(f"Arquivo {CONFIG_JSON_NOME} inexistente. Criando com valores default.")
+        config, serial = ConfiguracaoSistema(), ParametrosSerial()
+        salvar_parametros_json(config, serial)
+        return config, serial
+
+    try:
+        with open(CONFIG_JSON_PATH, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+
+        limites = dados.get("limites_seguranca", {})
+        padrao = ConfiguracaoSistema()
+        config = ConfiguracaoSistema(
+            tensao_minima_ac=float(limites.get("tensao_minima_ac", padrao.tensao_minima_ac)),
+            tensao_maxima_ac=float(limites.get("tensao_maxima_ac", padrao.tensao_maxima_ac)),
+            tensao_minima_dc=float(limites.get("tensao_minima_dc", padrao.tensao_minima_dc)),
+            tensao_maxima_dc=float(limites.get("tensao_maxima_dc", padrao.tensao_maxima_dc)),
+            corrente_maxima=float(limites.get("corrente_maxima", padrao.corrente_maxima)),
+            disjuntor_automatico=bool(limites.get("disjuntor_automatico", padrao.disjuntor_automatico)),
+            tempo_reacao_s=int(limites.get("tempo_reacao_s", padrao.tempo_reacao_s)),
+            intervalo_leitura_s=int(limites.get("intervalo_leitura_s", padrao.intervalo_leitura_s)),
+            periodo_historico=str(limites.get("periodo_historico", padrao.periodo_historico)),
+        )
+
+        comunicacao = dados.get("comunicacao_serial", {})
+        serial = ParametrosSerial(
+            porta_com=str(comunicacao.get("porta_com", ParametrosSerial.porta_com)),
+            baud_rate=str(comunicacao.get("baud_rate", ParametrosSerial.baud_rate)),
+            timeout_s=int(comunicacao.get("timeout_s", ParametrosSerial.timeout_s)),
+        )
+    except (OSError, json.JSONDecodeError, AttributeError, TypeError, ValueError) as erro:
+        log_warning(f"Falha ao ler {CONFIG_JSON_NOME}: {erro}. Usando parâmetros default.")
+        return ConfiguracaoSistema(), ParametrosSerial()
+
+    erros = validar_configuracao(config)
+    if erros:
+        log_warning(f"Limites inválidos em config.json ({'; '.join(erros)}). Usando limites default.")
+        config = ConfiguracaoSistema()
+
+    log_info(f"Parâmetros carregados de {CONFIG_JSON_NOME}.")
+    return config, serial
+
+
+def salvar_parametros_json(config: ConfiguracaoSistema, serial: ParametrosSerial) -> None:
+    """Persiste os parâmetros de comunicação serial e os limites iniciais em JSON.
+    Lança OSError se não for possível gravar o arquivo."""
+    os.makedirs(os.path.dirname(CONFIG_JSON_PATH), exist_ok=True)
+    dados = {
+        "comunicacao_serial": asdict(serial),
+        "limites_seguranca": {
+            "tensao_minima_ac": config.tensao_minima_ac,
+            "tensao_maxima_ac": config.tensao_maxima_ac,
+            "tensao_minima_dc": config.tensao_minima_dc,
+            "tensao_maxima_dc": config.tensao_maxima_dc,
+            "corrente_maxima": config.corrente_maxima,
+            "disjuntor_automatico": config.disjuntor_automatico,
+            "tempo_reacao_s": config.tempo_reacao_s,
+            "intervalo_leitura_s": config.intervalo_leitura_s,
+            "periodo_historico": config.periodo_historico,
+        },
+    }
+    with open(CONFIG_JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(dados, f, indent=4, ensure_ascii=False)
+    log_info(f"Arquivo {CONFIG_JSON_NOME} salvo.")
