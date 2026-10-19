@@ -5,12 +5,18 @@
 *.FCStd?
 *.tmp
 
-# LaTeX build artifacts
+# LaTeX
 *.aux
 *.log
 *.out
 *.toc
 *.synctex.gz
+*.fdb_latexmk
+*.fls
+*.bbl
+*.blg
+*.lof
+*.lot
 
 # Python & App
 __pycache__/
