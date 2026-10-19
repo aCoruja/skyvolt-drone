@@ -9,9 +9,10 @@
 *.toc
 *.synctex.gz
 
-# Python
+# Python and app
 __pycache__/
 *.pyc
+
 
 # SO
 .DS_Store
