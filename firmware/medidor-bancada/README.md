@@ -1,6 +1,6 @@
 # Firmware do medidor de bancada
 
-**Esqueleto, não um medidor operacional.** O programa emite uma linha JSON por segundo com `ERRO` e grandezas nulas; não acessa sensores nem classifica sinais. Isso impede que pinos, componentes ou coeficientes desconhecidos gerem leituras aparentemente válidas. Contrato: [protocolo de telemetria](../../docs/protocolo_telemetria.md).
+**Diagnóstico de bancada, não um medidor operacional.** O programa lê GPIO1 e GPIO2, calcula médias em milivolts e emite uma linha JSON aproximadamente por segundo com `ERRO` e grandezas físicas nulas. Ele não classifica sinais nem calcula grandezas físicas; valores ADC são apenas para diagnóstico e calibração. Usar somente após revisão do esquema de baixa tensão. Contrato: [protocolo de telemetria](../../docs/protocolo_telemetria.md).
 
 `medicao.h` implementa cálculo independente de hardware sobre pares de amostras físicas já calibradas: médias, RMS total, componente AC da tensão e potência ativa média. Para uma fonte DC constante, potência é V × I. Para AC, potência depende de pares sincronizados e do tratamento de offset e fase. Não existe ainda aquisição temporizada, detecção de saturação, classificação, calibração ou armazenamento de coeficientes. O cálculo de RMS total preserva componente DC; o RMS AC subtrai a média da janela.
 
@@ -16,3 +16,5 @@ g++ -std=c++11 -Wall -Wextra -pedantic tests/test_medicao.cpp -o /tmp/skyvolt-te
 ```
 
 Executar da raiz do repositório. O teste não comprova precisão de sensores, firmware na placa ou segurança elétrica.
+
+`python3 firmware/medidor-bancada/calibrar.py arquivo.csv` ajusta uma reta a dados com cabeçalho `adc_mv,referencia`, um arquivo por canal. Coletar pontos reais com instrumento, guardar a unidade e validar em pontos independentes. O erro nos dados usados no ajuste não comprova precisão final.

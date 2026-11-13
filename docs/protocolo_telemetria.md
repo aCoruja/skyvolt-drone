@@ -1,6 +1,6 @@
 # Telemetria do medidor — proposta para SCRUM-14 e SCRUM-15
 
-**Rascunho de integração; ainda não validado na placa.** O esqueleto do firmware emite somente o estado de erro descrito abaixo. Interface serial USB de bancada: 115200 baud, 8N1, UTF-8, um objeto JSON por linha (`\n`). A periodicidade definitiva será definida após medir a duração da aquisição. Este formato não define o enquadramento LoRa.
+**Rascunho de integração; ainda não validado na placa.** O firmware de diagnóstico emite somente o estado de erro, acrescentando `adc_v_mv` e `adc_i_mv` com médias dos pinos em milivolts. Interface serial USB de bancada: 115200 baud, 8N1, UTF-8, um objeto JSON por linha (`\n`). A periodicidade definitiva será definida após medir a duração da aquisição. Este formato não define o enquadramento LoRa.
 
 ```json
 {"t":123456,"estado":"OK","tipo":"AC","v":12.0,"i":0.5,"p":6.0}
@@ -15,7 +15,7 @@
 | `i` | número ou null | Ampères: RMS para AC ou média com sentido definido para DC. |
 | `p` | número ou null | Watts de potência ativa, com convenção de sinal documentada na calibração. |
 
-Usar `null` para grandezas indisponíveis, sem sensor ou inválidas; nunca substituir por zero. `OK` indica aquisição válida, não certifica precisão ou segurança. Quando houver saturação, falha de amostragem, calibração ausente ou outra falha detectada, informar `ERRO` e usar `null` nos valores afetados. `SEM_CONTATO` só pode ser emitido quando houver detecção efetiva de contato; tensão ou corrente zero isoladamente não comprovam desconexão. Com recepção truncada, JSON inválido ou campos inesperados, o consumidor deve descartar a linha e aguardar a próxima. Dados de depuração não devem ser emitidos no mesmo canal como linhas que pareçam telemetria.
+Usar `null` para grandezas indisponíveis, sem sensor ou inválidas; nunca substituir por zero. `OK` indica aquisição válida, não certifica precisão ou segurança. Quando houver saturação, falha de amostragem, calibração ausente ou outra falha detectada, informar `ERRO` e usar `null` nos valores afetados. `SEM_CONTATO` só pode ser emitido quando houver detecção efetiva de contato; tensão ou corrente zero isoladamente não comprovam desconexão. Com recepção truncada ou JSON inválido, o consumidor deve descartar a linha e aguardar a próxima; campos adicionais desconhecidos devem ser ignorados. Dados de depuração não devem ser emitidos no mesmo canal como linhas que pareçam telemetria.
 
 Exemplo sem classificação nem valores confiáveis:
 
