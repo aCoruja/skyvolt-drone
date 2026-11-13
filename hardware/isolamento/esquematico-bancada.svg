@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1070" viewBox="0 0 1500 1070" role="img" aria-labelledby="title desc">
+  <title id="title">SkyVolt — proposta de circuito de bancada DC e arquitetura de isolamento</title>
+  <desc id="desc">Esquema proposto de medição DC com ESP32 e ACS712 para revisão, e diagrama conceitual da barreira de isolamento galvânico do drone.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f4f7fb}.card{fill:#fff;stroke:#d9e2ef;stroke-width:2}.line{fill:none;stroke:#243b53;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.wire{fill:none;stroke:#137e88;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.node{fill:#137e88}.comp{fill:#fff;stroke:#243b53;stroke-width:2.5}.bar{fill:#fff3df;stroke:#f0c47e;stroke-width:1.5}.box{fill:#eaf6f5;stroke:#77c4bb;stroke-width:2}.box2{fill:#eef3fa;stroke:#a8b9d0;stroke-width:2}.t{font-family:Arial,sans-serif;fill:#243b53}.title{font-size:30px;font-weight:700}.sub{font-size:16px;fill:#62748a}.section{font-size:20px;font-weight:700}.small{font-size:14px}.tiny{font-size:12px}.label{font-size:16px;font-weight:700}.warn{fill:#80500a;font-size:14px;font-weight:700}.badge{font-size:12px;font-weight:700;letter-spacing:1px;fill:#167b83}.dash{stroke:#d39135;stroke-width:3;stroke-dasharray:8 7}.arrow{fill:none;stroke:#167b83;stroke-width:3;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#167b83"/></marker>
+  </defs>
+  <rect class="bg" width="1500" height="1070"/>
+  <text x="55" y="56" class="t title">SkyVolt  /  Medição elétrica</text>
+  <text x="56" y="84" class="t sub">Proposta visual • bancada de baixa tensão e arquitetura de isolamento • revisão 0</text>
+  <rect x="55" y="106" width="1390" height="51" rx="9" class="bar"/>
+  <text x="76" y="137" class="t warn">RASCUNHO PARA REVISÃO • NÃO MONTAR SEM REVISÃO • SEM REDE / 100 V / DRONE</text>
+
+  <rect x="55" y="180" width="1390" height="535" rx="15" class="card"/>
+  <text x="82" y="220" class="t badge">01  /  CIRCUITO DE BANCADA</text>
+  <text x="82" y="250" class="t section">Medição de tensão e corrente DC • fonte isolada até 24 V</text>
+  <text x="82" y="275" class="t sub">O GND da fonte é comum ao ESP32 e ao USB; este circuito não é galvanicamente isolado.</text>
+
+  <!-- Tensão: entrada, divisor, filtro, ADC -->
+  <text x="87" y="330" class="t label">Tensão</text>
+  <text x="87" y="351" class="t small">Fonte +</text>
+  <circle cx="172" cy="345" r="6" fill="#fff" stroke="#137e88" stroke-width="3"/>
+  <path class="wire" d="M178 345 H250 M340 345 H415 M415 345 H490 M570 345 H690"/>
+  <rect x="250" y="333" width="90" height="24" class="comp"/>
+  <text x="264" y="322" class="t small">R1 390 kΩ</text>
+  <rect x="490" y="333" width="80" height="24" class="comp"/>
+  <text x="507" y="322" class="t small">R3 1 kΩ</text>
+  <circle class="node" cx="415" cy="345" r="5"/>
+  <path class="wire" d="M415 345 V385 M415 425 V466 M625 345 V382 M625 410 V466"/>
+  <rect x="403" y="385" width="24" height="40" class="comp"/>
+  <text x="435" y="407" class="t small">R2 10 kΩ</text>
+  <path class="line" d="M607 382 H643 M607 390 H643"/>
+  <path class="wire" d="M625 390 V410"/>
+  <text x="650" y="393" class="t small">C1 100 nF</text>
+  <circle class="node" cx="625" cy="345" r="5"/>
+  <path class="wire" d="M365 466 H735"/>
+  <text x="735" y="471" class="t small">GND comum</text>
+  <rect x="690" y="322" width="152" height="48" rx="8" class="box2"/>
+  <text x="708" y="351" class="t label">GPIO1 / ADC1</text>
+  <text x="880" y="340" class="t small">Divisor nominal 40:1</text>
+  <text x="880" y="361" class="t small">24 V na entrada → ~0,6 V no ADC</text>
+
+  <!-- Current power path -->
+  <text x="87" y="514" class="t label">Corrente</text>
+  <text x="87" y="541" class="t small">Fonte +</text>
+  <circle cx="172" cy="535" r="6" fill="#fff" stroke="#137e88" stroke-width="3"/>
+  <path class="wire" d="M178 535 H275 M467 535 H535 M650 535 H760"/>
+  <rect x="275" y="504" width="192" height="62" rx="8" class="box"/>
+  <text x="298" y="529" class="t label">ACS712 5 A</text>
+  <text x="293" y="550" class="t tiny">IP+    corrente    IP−</text>
+  <rect x="535" y="523" width="115" height="24" class="comp"/>
+  <text x="562" y="514" class="t small">Carga</text>
+  <text x="773" y="540" class="t small">Fonte − / GND comum</text>
+  <text x="87" y="588" class="t small">OUT do ACS712</text>
+  <circle cx="220" cy="583" r="5" fill="#fff" stroke="#137e88" stroke-width="3"/>
+  <path class="wire" d="M225 583 H260 M340 583 H405 M405 583 H485 M565 583 H690"/>
+  <rect x="260" y="571" width="80" height="24" class="comp"/>
+  <text x="269" y="562" class="t small">R4 10 kΩ</text>
+  <rect x="485" y="571" width="80" height="24" class="comp"/>
+  <text x="502" y="562" class="t small">R6 1 kΩ</text>
+  <circle class="node" cx="405" cy="583" r="5"/>
+  <circle class="node" cx="625" cy="583" r="5"/>
+  <path class="wire" d="M405 583 V608 M405 648 V670 M625 583 V608 M625 616 V670 M365 670 H735"/>
+  <rect x="393" y="608" width="24" height="40" class="comp"/>
+  <text x="425" y="632" class="t small">R5 10 kΩ</text>
+  <path class="line" d="M607 608 H643 M607 616 H643"/>
+  <text x="650" y="620" class="t small">C2 100 nF</text>
+  <rect x="690" y="560" width="152" height="48" rx="8" class="box2"/>
+  <text x="708" y="589" class="t label">GPIO2 / ADC1</text>
+  <text x="735" y="675" class="t small">GND comum</text>
+  <text x="880" y="535" class="t small">VCC do ACS712 → 5 V da placa</text>
+  <text x="880" y="557" class="t small">GND do ACS712 → GND comum</text>
+  <text x="880" y="588" class="t small">R4/R5 reduzem a saída nominal à metade.</text>
+  <text x="880" y="610" class="t small">Proteções, limites e carga: revisão pendente.</text>
+  <text x="880" y="650" class="t tiny">Ramos com o mesmo nome de sinal representam a mesma conexão.</text>
+
+  <!-- Isolation conceptual -->
+  <rect x="55" y="735" width="1390" height="280" rx="15" class="card"/>
+  <text x="82" y="775" class="t badge">02  /  ARQUITETURA PROPOSTA PARA O DRONE</text>
+  <text x="82" y="804" class="t section">Barreira galvânica • diagrama funcional, não esquemático de fabricação</text>
+  <rect x="90" y="828" width="465" height="125" rx="10" class="box2"/>
+  <text x="110" y="854" class="t label">DOMÍNIO MEDIDO  ·  GND_HV</text>
+  <text x="110" y="880" class="t small">Entrada → proteção e condicionamento → ADC</text>
+  <text x="110" y="903" class="t small">ADC I²C → MCU_HV → dados digitais</text>
+  <text x="110" y="929" class="t tiny">Proteção, alimentação e canal AC/DC ainda não definidos</text>
+  <path d="M750 829 V955" class="dash"/>
+  <text x="700" y="826" class="t tiny">BARREIRA</text>
+  <rect x="625" y="845" width="250" height="35" rx="7" class="box"/>
+  <text x="642" y="868" class="t small">Isolador digital / UART →</text>
+  <path class="arrow" d="M555 862 H625 M875 862 H945"/>
+  <rect x="625" y="900" width="250" height="35" rx="7" class="box"/>
+  <text x="650" y="923" class="t small">← DC-DC isolado</text>
+  <path class="arrow" d="M945 917 H875 M625 917 H555"/>
+  <rect x="945" y="828" width="465" height="125" rx="10" class="box2"/>
+  <text x="965" y="854" class="t label">DOMÍNIO DRONE  ·  GND_LV</text>
+  <text x="965" y="880" class="t small">ESP32 / Pixhawk / USB / bateria</text>
+  <text x="965" y="903" class="t small">Dados isolados + alimentação isolada</text>
+  <text x="965" y="929" class="t tiny">Nenhuma conexão condutiva comum entre domínios</text>
+  <text x="90" y="983" class="t small">Não há dimensões de isolamento ou componentes aprovados; consultar documentação e revisar com o professor.</text>
+  <text x="57" y="1044" class="t sub">SkyVolt  •  RNF02 / SCRUM-14  •  Valores e conexões sujeitos a verificação</text>
+</svg>

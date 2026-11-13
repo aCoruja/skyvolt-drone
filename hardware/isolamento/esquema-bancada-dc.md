@@ -1,5 +1,7 @@
 # Esquema proposto de bancada DC — revisão 0
 
+![Proposta visual de bancada DC e arquitetura de isolamento](esquematico-bancada.svg)
+
 **Rascunho para revisão do professor, sem ensaio ou aprovação. Máximo planejado: 24 V DC de fonte isolada.** Não utilizar para rede, 100 V, polaridade invertida ou no drone. O circuito medido compartilha GND com o ESP32 e o USB, portanto não atende ao RNF02. Conferir o módulo real ACS712, a placa, fontes e instrumentos antes de montar.
 
 ```text
