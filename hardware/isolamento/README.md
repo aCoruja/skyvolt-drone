@@ -66,7 +66,7 @@ Não realizar teste de rede neste card. Antes da montagem, confirmar com o profe
 2. Alimentar somente o lado LV com 5 V e verificar a saída do DC-DC **entre seus próprios terminais secundários**, sob carga prevista e dentro dos limites do datasheet. Não interpretar uma tensão flutuante entre domínios como prova de isolamento: capacitância e impedância do multímetro podem produzir leituras variáveis.
 3. Exercitar o enlace digital com valores conhecidos, contador de sequência e checksum/CRC; registrar quantidade de pacotes, perdas e erros. Com PC817, experimentar 9600 baud inicialmente e somente aumentar se necessário e demonstrado sem erros durante um ensaio documentado. Uma quantidade finita sem erro não prova ausência absoluta de erros.
 4. Aplicar pontos DC entre 0 e 24 V à entrada de baixa tensão, sem ultrapassar os limites do circuito, e comparar a grandeza recebida no ESP32 com um multímetro de referência ligado somente ao domínio medido. Registrar referência, leitura, erro absoluto e, para referência diferente de zero, erro percentual `100 × |leitura − referência| / |referência|`. Em zero registrar erro absoluto; avaliar pontos crescentes e decrescentes e repetir leituras. Separar calibração de verificação.
-5. Comparar resultados com o critério real do SCRUM-14, ainda não localizado no repositório. Não assumir < 1%. A medição de ponta a ponta inclui sensor e ADC; para avaliar especificamente o enlace, comparar valores digitais antes e depois da barreira usando meios que não a ponteiem. Ensaios DC não validam RMS AC, corrente ou desempenho em alta tensão.
+5. Comparar resultados com as metas sugeridas no SCRUM-14: erro de até 2% em tensão DC e até 5% em tensão AC e corrente, sujeitas a ajuste com equipe e professor. A medição de ponta a ponta inclui sensor e ADC; para avaliar especificamente o enlace, comparar valores digitais antes e depois da barreira usando meios que não a ponteiem. Ensaios DC não validam RMS AC, corrente ou desempenho em alta tensão.
 
 ### Registro para preencher durante o ensaio
 
@@ -84,7 +84,7 @@ Não realizar teste de rede neste card. Antes da montagem, confirmar com o profe
 - [ ] Inventário levantado; decisão confirmada com o laboratório.
 - [ ] Esquemático elétrico completo, revisado e commitado; o diagrama acima é conceitual.
 - [ ] Protótipo até 24 V DC montado e teste de resistência registrado.
-- [ ] Meta real do SCRUM-14 obtida e precisão demonstrada na faixa testada.
+- [ ] Metas sugeridas do SCRUM-14 confirmadas com a equipe e precisão demonstrada na faixa testada.
 - [x] Esboço conceitual de separação e requisitos de layout documentados; dimensões finais pendentes.
 - [ ] Front-end, barreira, proteção, normas e plano de validação para tensão perigosa revisados pelo professor antes de prosseguir.
 

@@ -1,0 +1,26 @@
+# Telemetria do medidor — proposta para SCRUM-14 e SCRUM-15
+
+**Rascunho de integração; ainda não validado na placa.** O esqueleto do firmware emite somente o estado de erro descrito abaixo. Interface serial USB de bancada: 115200 baud, 8N1, UTF-8, um objeto JSON por linha (`\n`). A periodicidade definitiva será definida após medir a duração da aquisição. Este formato não define o enquadramento LoRa.
+
+```json
+{"t":123456,"estado":"OK","tipo":"AC","v":12.0,"i":0.5,"p":6.0}
+```
+
+| Campo | Tipo | Significado |
+|---|---|---|
+| `t` | inteiro | Milissegundos desde a inicialização; contador de 32 bits pode retornar a zero após aproximadamente 49,7 dias. |
+| `estado` | string | `OK`, `SEM_CONTATO` ou `ERRO`. A detecção de contato ainda precisa de mecanismo validado. |
+| `tipo` | string ou null | `AC`, `DC` ou `null` quando indeterminado. Não inferir DC apenas por ausência de cruzamentos. |
+| `v` | número ou null | Volts: RMS para AC ou média com polaridade definida na calibração para DC. |
+| `i` | número ou null | Ampères: RMS para AC ou média com sentido definido para DC. |
+| `p` | número ou null | Watts de potência ativa, com convenção de sinal documentada na calibração. |
+
+Usar `null` para grandezas indisponíveis, sem sensor ou inválidas; nunca substituir por zero. `OK` indica aquisição válida, não certifica precisão ou segurança. Quando houver saturação, falha de amostragem, calibração ausente ou outra falha detectada, informar `ERRO` e usar `null` nos valores afetados. `SEM_CONTATO` só pode ser emitido quando houver detecção efetiva de contato; tensão ou corrente zero isoladamente não comprovam desconexão. Com recepção truncada, JSON inválido ou campos inesperados, o consumidor deve descartar a linha e aguardar a próxima. Dados de depuração não devem ser emitidos no mesmo canal como linhas que pareçam telemetria.
+
+Exemplo sem classificação nem valores confiáveis:
+
+```json
+{"t":123900,"estado":"ERRO","tipo":null,"v":null,"i":null,"p":null}
+```
+
+O aplicativo atual trabalha com dados simulados; este documento é um contrato proposto, não uma afirmação de compatibilidade já implementada.
