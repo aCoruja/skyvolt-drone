@@ -47,6 +47,6 @@ Metas **sugeridas**, sujeitas a aprovação da equipe e professor: tensão DC at
 | Sem sinal, ruído, saturação e contato ausente | Pendente | Pendente | Pendente | Conforme critério validado / pendente | Não ensaiado |
 | Potência ativa com defasagem conhecida | Pendente | Pendente | Pendente | AC / pendente | Não ensaiado |
 
-Registrar data, responsáveis, esquema/revisão, placa, sensores, fonte e limite de corrente, instrumentos e suas incertezas, firmware, coeficientes, valores de referência, fotos e anomalias. Testes acima de 24 V, incluindo 48 V e 220 V citados no card, não fazem parte desta etapa. [Protocolo de saída proposto](../../docs/protocolo_telemetria.md).
+Registrar data, responsáveis, esquema/revisão, placa, sensores, fonte e limite de corrente, instrumentos e suas incertezas, firmware, coeficientes, valores de referência, fotos e anomalias. Modelo para preenchimento: [resultados-bancada.csv](resultados-bancada.csv), inicialmente sem medições. Testes acima de 24 V, incluindo 48 V e 220 V citados no card, não fazem parte desta etapa. [Protocolo de saída proposto](../../docs/protocolo_telemetria.md).
 
 Referências: [Espressif — ADC ESP32-S3 e compartilhamento do ADC2](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/api-reference/peripherals/adc/adc_oneshot.html); [TI — ADS1115](https://www.ti.com/lit/ds/symlink/ads1115.pdf); [Allegro — ACS712](https://www.allegromicro.com/-/media/files/datasheets/acs712-datasheet.ashx).

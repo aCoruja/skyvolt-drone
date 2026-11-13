@@ -1,0 +1,9 @@
+ensaio,tipo,referencia_v,leitura_v,erro_v_percentual,referencia_a,leitura_a,erro_i_percentual,referencia_w,leitura_w,erro_p_percentual,classificacao_observada,resultado,observacoes
+DC zero,DC,,,,,,,,,,,NAO ENSAIADO,Usar erro absoluto em zero
+DC ponto baixo,DC,,,,,,,,,,,NAO ENSAIADO,
+DC ponto medio,DC,,,,,,,,,,,NAO ENSAIADO,
+DC ponto alto ate 24 V,DC,,,,,,,,,,,NAO ENSAIADO,
+AC baixa tensao carga resistiva,AC,,,,,,,,,,,NAO ENSAIADO,Fonte isolada
+AC baixa tensao carga com defasagem,AC,,,,,,,,,,,NAO ENSAIADO,Referencia de potencia ativa necessaria
+Sinal ausente,INDETERMINADO,,,,,,,,,,,NAO ENSAIADO,Nao presumir ausencia de contato
+Sinal saturado,ERRO,,,,,,,,,,,NAO ENSAIADO,
