@@ -23,6 +23,8 @@ flowchart LR
 
 O diagrama não é um esquemático elétrico: faltam pinos, componentes de proteção e valores aprovados. Não montar com base nele. Para AC, usar fonte de baixa tensão isolada apropriada e entrada condicionada para ambos semiciclos; confirmar isolamento de fonte, instrumentos e demais conexões. O canal DC e qualquer canal AC requerem análise de caminhos de terra antes de serem ligados simultaneamente.
 
+Uma seleção provisória de modelos genéricos e um esboço de ligações para revisão estão em [componentes de referência](componentes-referencia.md).
+
 ## Pontos para o projeto
 
 - Identificar o modelo da placa ESP32-S3, sensores e instrumentos, inclusive variante do ACS712 e saída do SCT-013. Determinar faixa de tensão, corrente, frequência e carga, limitações do multímetro e fonte; obter o esquema elétrico revisado **antes da montagem**.

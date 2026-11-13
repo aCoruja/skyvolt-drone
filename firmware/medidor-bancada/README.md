@@ -6,6 +6,8 @@
 
 Após definir placa, esquema, sensores e limites, implementar aquisição ADC1 e calibração rastreável, controle de tempo entre canais e classificação com estado indeterminado; validar limitações e falhas antes de emitir `OK`. Nunca usar a classificação como proteção elétrica. O arquivo `.ino` destina-se ao Arduino-ESP32 para ESP32-S3, mas a versão da plataforma ainda não foi fixada nem compilada para a placa.
 
+Para planejamento foram escolhidos GPIO1 e GPIO2 de uma ESP32-S3-DevKitC-1 e um ACS712 de 5 A; são referências provisórias descritas em [componentes de referência](../../hardware/isolamento/componentes-referencia.md), não uma configuração validada para aquisição.
+
 Teste local da matemática, sem dispositivo:
 
 ```sh
