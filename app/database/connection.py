@@ -90,6 +90,23 @@ class Database:
                     """
                 )
 
+                # 4. Histórico de telemetria (gravado continuamente pela thread de banco)
+                cursor.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS leituras (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        data_hora TEXT NOT NULL,
+                        tensao REAL NOT NULL,
+                        corrente REAL NOT NULL,
+                        potencia REAL NOT NULL,
+                        tipo_sinal TEXT NOT NULL CHECK(tipo_sinal IN ('AC', 'DC'))
+                    );
+                    """
+                )
+                cursor.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_leituras_data_hora ON leituras(data_hora);"
+                )
+
                 # Sementes idempotentes: Disjuntor Principal e Relé de Emergência
                 agora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 for tag, tipo in (
