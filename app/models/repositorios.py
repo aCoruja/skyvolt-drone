@@ -2,14 +2,17 @@ from __future__ import annotations
 
 import sqlite3
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional
 
 from app.database.connection import Database
 from app.models.configuracao import ConfiguracaoSistema
 from app.models.evento import Evento
+from app.models.telemetria import LeituraTelemetria
 
 STATUS_VALIDOS = ("ABERTO", "FECHADO")
 TAG_DISJUNTOR = "DISJ_PRINCIPAL"
+FORMATO_DATA_HORA = "%Y-%m-%d %H:%M:%S"
 
 
 @dataclass
@@ -41,6 +44,19 @@ def _linha_para_evento(row: sqlite3.Row) -> Evento:
         severidade=row["severidade"],
         dispositivo_id=row["dispositivo_id"],
     )
+
+
+def _linhas_para_pontos(rows) -> list[tuple[float, float, float, float]]:
+    """(epoch, tensao, corrente, potencia) — pronto para plotar."""
+    return [
+        (
+            datetime.strptime(r["data_hora"], FORMATO_DATA_HORA).timestamp(),
+            r["tensao"],
+            r["corrente"],
+            r["potencia"],
+        )
+        for r in rows
+    ]
 
 
 class DispositivoRepository:
@@ -215,6 +231,61 @@ class EventoRepository:
             return conn.execute("SELECT COUNT(*) FROM historico_eventos;").fetchone()[0]
         finally:
             conn.close()
+
+
+class LeituraRepository:
+    """Histórico contínuo de telemetria (SQL parametrizado)."""
+
+    @staticmethod
+    def inserir(
+        leitura: LeituraTelemetria, potencia: float, conn: Optional[sqlite3.Connection] = None
+    ) -> int:
+        def _executar(c: sqlite3.Connection) -> int:
+            cursor = c.execute(
+                """
+                INSERT INTO leituras (data_hora, tensao, corrente, potencia, tipo_sinal)
+                VALUES (?, ?, ?, ?, ?);
+                """,
+                (
+                    leitura.timestamp.strftime(FORMATO_DATA_HORA),
+                    leitura.tensao,
+                    leitura.corrente,
+                    potencia,
+                    leitura.tipo_sinal,
+                ),
+            )
+            return cursor.lastrowid or 0
+
+        return _na_transacao(conn, _executar)
+
+    @staticmethod
+    def consultar_ultimas(n: int) -> list[tuple[float, float, float, float]]:
+        conn = Database.get_connection()
+        try:
+            rows = conn.execute(
+                "SELECT data_hora, tensao, corrente, potencia FROM leituras ORDER BY id DESC LIMIT ?;",
+                (max(1, n),),
+            ).fetchall()
+        finally:
+            conn.close()
+        return _linhas_para_pontos(reversed(rows))
+
+    @staticmethod
+    def consultar_intervalo(
+        inicio: str, fim: str, limite: int = 20000
+    ) -> list[tuple[float, float, float, float]]:
+        conn = Database.get_connection()
+        try:
+            rows = conn.execute(
+                """
+                SELECT data_hora, tensao, corrente, potencia FROM leituras
+                WHERE data_hora BETWEEN ? AND ? ORDER BY data_hora LIMIT ?;
+                """,
+                (inicio, fim, limite),
+            ).fetchall()
+        finally:
+            conn.close()
+        return _linhas_para_pontos(rows)
 
 
 class RegrasLimitesRepository:
