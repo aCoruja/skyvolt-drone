@@ -12,6 +12,9 @@ from app.models.logger_service import log_info, log_warning
 CONFIG_JSON_PATH = os.path.join(DATA_DIR, "config.json")
 CONFIG_JSON_NOME = "data/config.json"  # caminho curto usado nas mensagens de log
 
+# Velocidades suportadas pelo protocolo serial. A conexão SEMPRE inicia em BAUD_RATES[0].
+BAUD_RATES = (9600, 19200, 38400, 115200)
+
 
 @dataclass
 class ConfiguracaoSistema:
@@ -40,7 +43,7 @@ class ConfiguracaoSistema:
     tempo_reacao_s: int = 5  # segundos de janela pro operador agir antes do corte automático
 
     # --- Amostragem e histórico ---
-    intervalo_leitura_s: int = 2  # segundos entre leituras (Unidade 4: leitura serial real)
+    intervalo_leitura_s: int = 2  # segundos entre leituras (enviado à placa no handshake)
     periodo_historico: str = "24h"  # janela do gráfico de tendência — ver PERIODOS_DISPONIVEIS
     data_inicio: date = field(default_factory=date.today)  # data inicial do histórico consultado
 
@@ -56,7 +59,8 @@ class ConfiguracaoSistema:
 
 @dataclass
 class ParametrosSerial:
-    """Parâmetros do painel de comunicação serial (configuração local do drone)."""
+    """Parâmetros do painel de comunicação serial. `baud_rate` é a velocidade ALVO
+    negociada no handshake; a conexão sempre começa a 9600 bps."""
 
     porta_com: str = "COM1"
     baud_rate: str = "9600"
@@ -143,6 +147,10 @@ def carregar_parametros_json() -> tuple[ConfiguracaoSistema, ParametrosSerial]:
     except (OSError, json.JSONDecodeError, AttributeError, TypeError, ValueError) as erro:
         log_warning(f"Falha ao ler {CONFIG_JSON_NOME}: {erro}. Usando parâmetros default.")
         return ConfiguracaoSistema(), ParametrosSerial()
+
+    if serial.baud_rate not in {str(b) for b in BAUD_RATES}:
+        log_warning(f"Baud rate inválido em {CONFIG_JSON_NOME} ({serial.baud_rate}). Usando {BAUD_RATES[0]}.")
+        serial.baud_rate = str(BAUD_RATES[0])
 
     erros = validar_configuracao(config)
     if erros:
