@@ -1,14 +1,12 @@
 from __future__ import annotations
 
-import sqlite3
 from typing import Optional
 
 from PyQt5.QtCore import QDate
 from PyQt5.QtWidgets import QAbstractSpinBox, QDialog, QMessageBox, QWidget
 
 from app.models.configuracao import ConfiguracaoSistema, copiar_configuracao, validar_configuracao
-from app.models.logger_service import log_error, log_info, log_warning
-from app.models.repositorios import RegrasLimitesRepository
+from app.models.logger_service import log_info, log_warning
 from app.ui.config_dialog_ui import Ui_ConfigDialog
 
 # Faixa ampla de propósito: o spin box aceita digitar negativos e a validação de
@@ -17,6 +15,9 @@ FAIXA_DIGITAVEL = (-9999.0, 9999.0)
 
 
 class ConfigController(QDialog, Ui_ConfigDialog):
+    """Valida a entrada do operador. A gravação (SQLite) é feita pela thread de
+    banco, disparada pelo MainController depois que o diálogo é aceito."""
+
     def __init__(self, configuracao: ConfiguracaoSistema, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
         self._configuracao = copiar_configuracao(configuracao)
@@ -108,7 +109,7 @@ class ConfigController(QDialog, Ui_ConfigDialog):
         )
 
     def _validar_e_aceitar(self) -> None:
-        """Validação preventiva: nada é gravado enquanto houver erro de entrada."""
+        """Validação preventiva: nada é aceito enquanto houver erro de entrada."""
         erros = self._erros_de_preenchimento()
         nova_cfg = None
         if not erros:
@@ -122,16 +123,9 @@ class ConfigController(QDialog, Ui_ConfigDialog):
             )
             return
 
-        try:
-            RegrasLimitesRepository.salvar(nova_cfg)
-        except sqlite3.Error as erro:
-            log_error(f"Falha ao gravar limites na tabela regras_limites. Rollback executado: {erro}.")
-            QMessageBox.critical(self, "Erro de banco", f"Não foi possível salvar os limites:\n{erro}")
-            return
-
         self._configuracao = nova_cfg
         log_info(
-            f"Limites salvos no SQLite: corrente máx. {nova_cfg.corrente_maxima:.1f}A, "
+            f"Limites validados: corrente máx. {nova_cfg.corrente_maxima:.1f}A, "
             f"AC {nova_cfg.tensao_minima_ac:.1f}–{nova_cfg.tensao_maxima_ac:.1f}V, "
             f"DC {nova_cfg.tensao_minima_dc:.1f}–{nova_cfg.tensao_maxima_dc:.1f}V."
         )
@@ -143,7 +137,7 @@ class ConfigController(QDialog, Ui_ConfigDialog):
 
 def abrir_configuracoes(parent: QWidget, configuracao: ConfiguracaoSistema) -> Optional[ConfiguracaoSistema]:
     """Abre o dialog de configuração modal. Retorna a nova ConfiguracaoSistema
-    (já gravada no banco) se o usuário confirmar, ou None se cancelar."""
+    (ainda não gravada no banco) se o usuário confirmar, ou None se cancelar."""
     dialogo = ConfigController(configuracao, parent=parent)
     if dialogo.exec_():
         return dialogo.configuracao()
