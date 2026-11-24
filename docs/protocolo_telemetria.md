@@ -24,3 +24,17 @@ Exemplo sem classificação nem valores confiáveis:
 ```
 
 O aplicativo atual trabalha com dados simulados; este documento é um contrato proposto, não uma afirmação de compatibilidade já implementada.
+
+## Extensão Wi-Fi (sonda, `firmware/sonda-wifi`)
+
+Mesmo formato, transportado por TCP (porta 3333). O handshake usa `"baud": 9600`, que não se aplica ao Wi-Fi, e por isso não há SYNC. A telemetria acrescenta `"rele": "ABERTO"|"FECHADO"` (estado do K2). Comandos app → sonda, cada um respondido com um `ack`:
+
+| Comando | Resposta | Efeito |
+|---|---|---|
+| `{"cmd":"RELE","estado":"FECHADO"}` | `{"ack":"RELE","estado":"FECHADO"}` | disjuntor do app → chave K2 (MOSFETs) |
+| `{"cmd":"MODO","tipo":"DC"}` | `{"ack":"MODO","tipo":"DC"}` | modo do painel → canal de tensão lido (ZMPT ou divisor DC) |
+| `{"cmd":"PING"}` | `{"ack":"PING"}` | keepalive a cada 2 s; após 6 s sem comandos a sonda abre a chave K2 |
+
+Um comando inválido recebe `{"ack":"ERRO","motivo":"..."}`.
+
+Sem ser pedido, a sonda manda `{"ack":"RELE","estado":"ABERTO","motivo":"SOBRECORRENTE","i":8.0}` quando abre a chave K2 por sobrecorrente (acima de 3 A, ou com o ADC do ACS712 fora da faixa). Essa mensagem também substitui a confirmação de um `RELE FECHADO` que disparou ao fechar. O app então abre o disjuntor e grava o evento.
