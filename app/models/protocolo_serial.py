@@ -22,6 +22,27 @@ def montar_sync() -> bytes:
     return (json.dumps({"cmd": "SYNC"}) + "\n").encode(ENCODING)
 
 
+def montar_comando_rele(disjuntor_fechado: bool) -> bytes:
+    """Disjuntor do app -> chave K2 da sonda (Wi-Fi)."""
+    estado = "FECHADO" if disjuntor_fechado else "ABERTO"
+    return (json.dumps({"cmd": "RELE", "estado": estado}) + "\n").encode(ENCODING)
+
+
+def montar_comando_modo(tipo_sinal: str) -> bytes:
+    """Tipo de sinal escolhido no painel -> canal de tensão lido pela sonda (Wi-Fi)."""
+    return (json.dumps({"cmd": "MODO", "tipo": tipo_sinal}) + "\n").encode(ENCODING)
+
+
+def montar_ping() -> bytes:
+    """Keepalive: sem comandos por alguns segundos, a sonda abre a chave K2 por segurança."""
+    return (json.dumps({"cmd": "PING"}) + "\n").encode(ENCODING)
+
+
+def extrair_ack(linha: Union[bytes, str]) -> Optional[dict]:
+    dados = _decodificar_json(linha)
+    return dados if dados is not None and "ack" in dados else None
+
+
 def _decodificar_json(linha: Union[bytes, str]) -> Optional[dict]:
     texto = linha.decode(ENCODING, errors="replace") if isinstance(linha, bytes) else linha
     try:

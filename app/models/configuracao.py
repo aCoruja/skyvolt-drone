@@ -67,6 +67,15 @@ class ParametrosSerial:
     timeout_s: int = 5
 
 
+@dataclass
+class ParametrosWifi:
+    """Endereço da sonda (firmware/sonda-wifi). 192.168.4.1 é o IP da rede própria
+    'SkyVolt-Sonda' que a placa cria quando não há Wi-Fi configurado."""
+
+    host: str = "192.168.4.1"
+    porta: int = 3333
+
+
 def configuracao_padrao() -> ConfiguracaoSistema:
     """Retorna a ConfiguracaoSistema com os valores padrão do sistema — usada ao abrir o
     app, antes do usuário editar qualquer coisa via ConfigDialog."""
@@ -161,11 +170,50 @@ def carregar_parametros_json() -> tuple[ConfiguracaoSistema, ParametrosSerial]:
     return config, serial
 
 
-def salvar_parametros_json(config: ConfiguracaoSistema, serial: ParametrosSerial) -> None:
-    """Persiste os parâmetros de comunicação serial e os limites iniciais em JSON.
-    Lança OSError se não for possível gravar o arquivo."""
+def _ler_json_existente() -> dict:
+    try:
+        with open(CONFIG_JSON_PATH, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return dados if isinstance(dados, dict) else {}
+
+
+def _gravar_json(dados: dict) -> None:
     os.makedirs(os.path.dirname(CONFIG_JSON_PATH), exist_ok=True)
-    dados = {
+    with open(CONFIG_JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(dados, f, indent=4, ensure_ascii=False)
+
+
+def carregar_parametros_wifi() -> ParametrosWifi:
+    secao = _ler_json_existente().get("comunicacao_wifi", {})
+    padrao = ParametrosWifi()
+    try:
+        host = str(secao.get("host", padrao.host)).strip()
+        porta = int(secao.get("porta", padrao.porta))
+    except (AttributeError, TypeError, ValueError):
+        log_warning(f"Seção comunicacao_wifi inválida em {CONFIG_JSON_NOME}. Usando o padrão.")
+        return padrao
+    if not host or not 1 <= porta <= 65535:
+        log_warning(f"Endereço Wi-Fi inválido em {CONFIG_JSON_NOME} ({host}:{porta}). Usando o padrão.")
+        return padrao
+    return ParametrosWifi(host=host, porta=porta)
+
+
+def salvar_parametros_wifi(wifi: ParametrosWifi) -> None:
+    """Lança OSError se não for possível gravar o arquivo."""
+    dados = _ler_json_existente()
+    dados["comunicacao_wifi"] = asdict(wifi)
+    _gravar_json(dados)
+    log_info(f"Endereço da sonda salvo em {CONFIG_JSON_NOME}: {wifi.host}:{wifi.porta}.")
+
+
+def salvar_parametros_json(config: ConfiguracaoSistema, serial: ParametrosSerial) -> None:
+    """Persiste os parâmetros de comunicação serial e os limites iniciais em JSON,
+    preservando as demais seções (ex.: comunicacao_wifi).
+    Lança OSError se não for possível gravar o arquivo."""
+    dados = _ler_json_existente()
+    dados.update({
         "comunicacao_serial": asdict(serial),
         "limites_seguranca": {
             "tensao_minima_ac": config.tensao_minima_ac,
@@ -178,7 +226,6 @@ def salvar_parametros_json(config: ConfiguracaoSistema, serial: ParametrosSerial
             "intervalo_leitura_s": config.intervalo_leitura_s,
             "periodo_historico": config.periodo_historico,
         },
-    }
-    with open(CONFIG_JSON_PATH, "w", encoding="utf-8") as f:
-        json.dump(dados, f, indent=4, ensure_ascii=False)
+    })
+    _gravar_json(dados)
     log_info(f"Arquivo {CONFIG_JSON_NOME} salvo.")
