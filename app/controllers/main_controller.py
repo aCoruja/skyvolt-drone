@@ -5,12 +5,20 @@ from typing import Optional
 
 import pyqtgraph as pg
 from PyQt5.QtCore import QThread, QTimer, pyqtSignal
-from PyQt5.QtWidgets import QMainWindow, QMessageBox, QTableWidgetItem
+from PyQt5.QtWidgets import QInputDialog, QMainWindow, QMessageBox, QTableWidgetItem
 
 from app.controllers.config_controller import abrir_configuracoes
 from app.controllers.db_worker import DbWorker
 from app.controllers.serial_worker import SerialWorker
-from app.models.configuracao import BAUD_RATES, carregar_parametros_json, salvar_parametros_json
+from app.controllers.wifi_worker import WifiWorker
+from app.models.configuracao import (
+    BAUD_RATES,
+    ParametrosWifi,
+    carregar_parametros_json,
+    carregar_parametros_wifi,
+    salvar_parametros_json,
+    salvar_parametros_wifi,
+)
 from app.models.evento import COLUNAS, Evento, criar_evento, evento_para_linha
 from app.models.formatacao import (
     estilo_qualidade,
@@ -19,12 +27,11 @@ from app.models.formatacao import (
     formatar_corrente,
     formatar_potencia,
     formatar_tensao,
-    texto_status_conexao,
     texto_status_disjuntor,
 )
 from app.models.log_console import log_evento, log_sucesso
 from app.models.logger_service import log_error, log_info, log_warning
-from app.models.protocolo_serial import listar_portas
+from app.models.protocolo_serial import listar_portas, montar_comando_modo, montar_comando_rele
 from app.models.telemetria import (
     TIPOS_SINAL_DISPONIVEIS,
     LeituraTelemetria,
@@ -39,6 +46,7 @@ from app.ui.painel_historico import PainelHistorico
 MAX_PONTOS_GRAFICO = 100
 BAUD_RATES_DISPONIVEIS = [str(b) for b in BAUD_RATES]
 INTERVALO_RECONEXAO_MS = 3000
+TIMEOUT_ACK_RELE_MS = 3000
 
 
 class MainController(QMainWindow, Ui_MainWindow):
@@ -72,6 +80,8 @@ class MainController(QMainWindow, Ui_MainWindow):
         self.cmbTipoSinal.currentTextChanged.connect(self._tipo_sinal_mudou)
         self._timer_risco.timeout.connect(self._acionar_disjuntor_automatico)
         self._timer_reconexao.timeout.connect(self._tentar_reconectar)
+        self._timer_reconexao_wifi.timeout.connect(self._tentar_reconectar_wifi)
+        self._timer_ack_rele.timeout.connect(self._rele_sem_ack)
         self.btnConectar.clicked.connect(self._clique_conectar)
         self.btnDesconectar.clicked.connect(self.desconectar_serial)
         self.btnConectarWifi.clicked.connect(self.conectar_wifi)
@@ -91,6 +101,19 @@ class MainController(QMainWindow, Ui_MainWindow):
         self._timer_reconexao = QTimer(self)
         self._timer_reconexao.setSingleShot(True)
         self._timer_reconexao.setInterval(INTERVALO_RECONEXAO_MS)
+
+        self._wifi = carregar_parametros_wifi()
+        self._wifi_worker: Optional[WifiWorker] = None
+        self._wifi_reconectar = False
+        self._wifi_em_reconexao = False
+        self._wifi_desconexao_manual = False
+        self._timer_reconexao_wifi = QTimer(self)
+        self._timer_reconexao_wifi.setSingleShot(True)
+        self._timer_reconexao_wifi.setInterval(INTERVALO_RECONEXAO_MS)
+        self._rele_esperado: Optional[str] = None
+        self._timer_ack_rele = QTimer(self)
+        self._timer_ack_rele.setSingleShot(True)
+        self._timer_ack_rele.setInterval(TIMEOUT_ACK_RELE_MS)
 
         self._serial_worker: Optional[SerialWorker] = None
         self._reconectar = False
@@ -174,10 +197,10 @@ class MainController(QMainWindow, Ui_MainWindow):
 
     # ------------------------------------------------------------------ serial (thread)
     def preparar_conectividade(self) -> None:
-        """LoRa/serial (telemetria), WiFi (FPV) e configuração local (porta COM, baud
-        alvo e timeout, lidos de/gravados em config.json)."""
+        """LoRa/serial e Wi-Fi (sonda, firmware/sonda-wifi) para telemetria, e configuração
+        local (porta COM, baud alvo e timeout, lidos de/gravados em config.json)."""
         self._mostrar_link("Desconectado", ativo=False)
-        self.atualizar_status_wifi(conectado=False)
+        self._mostrar_wifi("Desconectado", ativo=False)
 
         self.cmbPortaCOM.setEditable(True)  # aceita porta virtual digitada (com0com/socat)
         self.cmbPortaCOM.addItems(listar_portas())
@@ -281,6 +304,9 @@ class MainController(QMainWindow, Ui_MainWindow):
     def _tipo_sinal_mudou(self, tipo: str) -> None:
         if self._serial_worker is not None:
             self._serial_worker.definir_tipo_padrao(tipo)
+        if self._wifi_worker is not None:
+            self._wifi_worker.definir_tipo_padrao(tipo)
+            self._wifi_worker.enviar_comando(montar_comando_modo(tipo))  # canal AC/DC da sonda
 
     # ------------------------------------------------------------------ telemetria
     def processar_leitura(self, leitura: LeituraTelemetria) -> None:
@@ -357,19 +383,161 @@ class MainController(QMainWindow, Ui_MainWindow):
         nesta simulação — e decide qual garra (efetuador) o painel indica."""
         self.cmbTipoSinal.addItems(TIPOS_SINAL_DISPONIVEIS)
 
-    def atualizar_status_wifi(self, conectado: bool) -> None:
-        self.lblStatusWifi.setText(texto_status_conexao(conectado))
-        self.lblStatusWifi.setStyleSheet(estilo_status_conexao(conectado))
-        self.btnConectarWifi.setEnabled(not conectado)
-        self.btnDesconectarWifi.setEnabled(conectado)
+    # ------------------------------------------------------------------ Wi-Fi (thread)
+    def _mostrar_wifi(self, texto: str, ativo: bool) -> None:
+        self.lblStatusWifi.setText(texto)
+        self.lblStatusWifi.setStyleSheet(estilo_status_conexao(ativo))
+        vivo = self._wifi_worker is not None
+        self.btnConectarWifi.setEnabled(not vivo)
+        self.btnDesconectarWifi.setEnabled(vivo)
 
     def conectar_wifi(self) -> None:
-        self.atualizar_status_wifi(conectado=True)
-        log_sucesso("WiFi conectado (simulado) — link de voo/FPV ativo.")
+        """Pede o endereço da sonda (pré-preenchido com o último usado) e conecta."""
+        if self._wifi_worker is not None:
+            return
+        texto, ok = QInputDialog.getText(
+            self, "Conectar à sonda (Wi-Fi)",
+            "Endereço da sonda (host:porta).\n192.168.4.1:3333 = rede própria 'SkyVolt-Sonda'.",
+            text=f"{self._wifi.host}:{self._wifi.porta}",
+        )
+        if not ok:
+            return
+        host, _, porta = texto.strip().rpartition(":")
+        if not host or not porta.isdigit() or not 1 <= int(porta) <= 65535:
+            log_warning(f"Entrada inválida bloqueada no endereço Wi-Fi: {texto!r}.")
+            QMessageBox.warning(self, "Endereço inválido", "Use o formato host:porta, ex. 192.168.4.1:3333.")
+            return
+        self._wifi = ParametrosWifi(host=host, porta=int(porta))
+        self._wifi_em_reconexao = False
+        try:
+            salvar_parametros_wifi(self._wifi)
+        except OSError as erro:
+            log_error(f"Falha ao salvar o endereço Wi-Fi em config.json: {erro}.")
+        self.iniciar_wifi()
+
+    def iniciar_wifi(self) -> None:
+        if self._wifi_worker is not None:
+            return
+        worker = WifiWorker(
+            host=self._wifi.host,
+            porta=self._wifi.porta,
+            intervalo_ms=self._config.intervalo_leitura_s * 1000,
+            timeout_s=self.spnTimeout.value(),
+            tipo_padrao=self.cmbTipoSinal.currentText(),
+        )
+        worker.estado_mudou.connect(lambda texto: self._mostrar_wifi(texto, False))
+        worker.handshake_concluido.connect(self._wifi_handshake_ok)
+        worker.leitura_recebida.connect(self.processar_leitura)
+        worker.ack_recebido.connect(self._wifi_ack)
+        worker.conexao_perdida.connect(self._wifi_perdida)
+        worker.erro.connect(self._wifi_erro)
+        worker.finished.connect(self._wifi_finalizada)
+        worker.finished.connect(worker.deleteLater)
+        self._wifi_worker = worker
+        self._wifi_reconectar = True
+        self._wifi_desconexao_manual = False
+        self._mostrar_wifi(f"Conectando em {self._wifi.host}…", False)
+        worker.start()
 
     def desconectar_wifi(self) -> None:
-        self.atualizar_status_wifi(conectado=False)
-        log_sucesso("WiFi desconectado — link de voo/FPV suspenso.")
+        self._wifi_reconectar = False
+        self._wifi_em_reconexao = False
+        self._wifi_desconexao_manual = True
+        self._timer_reconexao_wifi.stop()
+        self._timer_ack_rele.stop()
+        if self._wifi_worker is not None:
+            self._wifi_worker.solicitar_parada()
+            self._mostrar_wifi("Desconectando…", False)
+        else:
+            self._mostrar_wifi("Desconectado", False)
+
+    def _wifi_handshake_ok(self, destino: str) -> None:
+        self._wifi_em_reconexao = False
+        self._mostrar_wifi("Conectado", True)
+        log_sucesso(f"Sonda Wi-Fi conectada em {destino}.")
+        self.registrar_evento("Comunicação", f"Sonda Wi-Fi conectada em {destino}", "Info")
+        # A sonda liga com K2 aberto: sincroniza com o estado do disjuntor gravado no banco.
+        self._wifi_worker.enviar_comando(montar_comando_modo(self.cmbTipoSinal.currentText()))
+        self._enviar_rele()
+
+    def _enviar_rele(self) -> None:
+        if self._wifi_worker is None:
+            return
+        self._rele_esperado = "FECHADO" if self._disjuntor_fechado else "ABERTO"
+        self._wifi_worker.enviar_comando(montar_comando_rele(self._disjuntor_fechado))
+        self._timer_ack_rele.start()
+
+    def _wifi_ack(self, ack: dict) -> None:
+        tipo = ack.get("ack")
+        if tipo == "RELE" and ack.get("motivo") == "SOBRECORRENTE":
+            self._disparo_sonda(ack)
+        elif tipo == "RELE":
+            if ack.get("estado") == self._rele_esperado:
+                self._timer_ack_rele.stop()
+            log_info(f"Sonda confirmou a chave K2 {ack.get('estado')}.")
+        elif tipo == "MODO":
+            log_info(f"Sonda em modo {ack.get('tipo')}.")
+        elif tipo == "ERRO":
+            log_error(f"Sonda recusou comando: {ack.get('motivo')}.")
+            self.registrar_evento("Comunicação", f"Sonda recusou comando: {ack.get('motivo')}", "Alerta")
+
+    def _disparo_sonda(self, ack: dict) -> None:
+        """A sonda abriu o K2 sozinha por sobrecorrente: o disjuntor do app acompanha (com histórico)."""
+        self._timer_ack_rele.stop()
+        try:
+            corrente = f"~{float(ack.get('i')):.1f} A"
+        except (TypeError, ValueError):
+            corrente = "corrente fora da escala"
+        descricao = f"Disparo por sobrecorrente na sonda ({corrente}): chave K2 aberta"
+        log_error(f"{descricao}.")
+        self.statusBar().showMessage(f"{descricao}. Verifique se há carga em série antes de religar.", 15000)
+        if self._risco_ativo:
+            self._timer_risco.stop()
+            self._risco_ativo = False
+        if self._disjuntor_fechado:
+            self._comandar_disjuntor("ABERTO", descricao, "Critico")
+        else:
+            self.registrar_evento("Disjuntor", descricao, "Critico")
+
+    def _rele_sem_ack(self) -> None:
+        log_error(f"Sonda não confirmou a chave K2 {self._rele_esperado} em {TIMEOUT_ACK_RELE_MS / 1000:.0f}s.")
+        self.registrar_evento(
+            "Comunicação", f"Sonda não confirmou a chave K2 ({self._rele_esperado})", "Critico"
+        )
+
+    def _wifi_perdida(self, mensagem: str) -> None:
+        log_error(f"Link Wi-Fi perdido: {mensagem}")
+        self._timer_ack_rele.stop()
+        self._wifi_em_reconexao = True
+        self._mostrar_wifi("Link perdido — reconectando…", False)
+        self.registrar_evento(
+            "Comunicação", f"Link Wi-Fi perdido (a sonda abre a chave K2): {mensagem}", "Critico"
+        )
+        if self._wifi_reconectar:
+            self._timer_reconexao_wifi.start()
+
+    def _wifi_erro(self, mensagem: str) -> None:
+        log_error(mensagem)
+        self.statusBar().showMessage(mensagem, 10000)
+        if self._wifi_em_reconexao and self._wifi_reconectar:
+            self._mostrar_wifi("Link perdido — reconectando…", False)
+            self._timer_reconexao_wifi.start()  # a sonda pode ainda estar reiniciando
+            return
+        self._wifi_reconectar = False
+        self._mostrar_wifi("Falha na conexão", False)
+        self.registrar_evento("Comunicação", mensagem, "Alerta")
+
+    def _wifi_finalizada(self) -> None:
+        self._wifi_worker = None
+        if self._encerrando:
+            return
+        texto = "Desconectado" if self._wifi_desconexao_manual else self.lblStatusWifi.text()
+        self._wifi_desconexao_manual = False
+        self._mostrar_wifi(texto, False)
+
+    def _tentar_reconectar_wifi(self) -> None:
+        if self._wifi_reconectar and self._wifi_worker is None:
+            self.iniciar_wifi()
 
     def adicionar_evento(self, evento: Evento) -> None:
         linha = self.tblEventos.rowCount()
@@ -496,6 +664,7 @@ class MainController(QMainWindow, Ui_MainWindow):
             )
             return
 
+        self._enviar_rele()  # disjuntor do app -> chave K2 da sonda (se conectada por Wi-Fi)
         self.adicionar_evento(resultado.evento)
         self.tblEventos.scrollToBottom()
         log_evento("Disjuntor", ctx["descricao"], ctx["severidade"])
@@ -556,11 +725,14 @@ class MainController(QMainWindow, Ui_MainWindow):
         encerra a thread de banco (o deleteLater dos workers roda no finished)."""
         self._encerrando = True
         self._reconectar = False
+        self._wifi_reconectar = False
         self._timer_reconexao.stop()
-        worker = self._serial_worker
-        if worker is not None:
-            worker.solicitar_parada()
-            worker.wait(3000)
+        self._timer_reconexao_wifi.stop()
+        self._timer_ack_rele.stop()
+        for worker in (self._serial_worker, self._wifi_worker):
+            if worker is not None:
+                worker.solicitar_parada()
+                worker.wait(3000)
         self._thread_db.quit()
         self._thread_db.wait(3000)
         super().closeEvent(event)
